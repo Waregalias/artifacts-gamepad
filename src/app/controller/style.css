@@ -2,13 +2,3 @@
     margin: 0 auto;
     border: 0;
 }
-
-.desc {
-    display: flex;
-    align-items: center;
-}
-
-.disc {
-    margin-right: 5px;
-    color: red;
-}

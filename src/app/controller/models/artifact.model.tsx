@@ -118,3 +118,9 @@ export enum ArtifactActionMoveY {
   directionDown = 1,
 }
 
+export enum ArtifactActionButton {
+  buttonUp = 'rest',
+  buttonRight = 'fight',
+  buttonDown = '',
+  buttonLeft = '',
+}

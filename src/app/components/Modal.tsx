@@ -28,7 +28,6 @@ const data = {
   nav: [
     {name: "Artifact GPad", icon: Swords},
     {name: "Controllers", icon: Keyboard, href: '/controller'},
-    {name: "History", icon: History, href: '/history'},
     {name: "Settings", icon: Settings, href: '/settings'},
   ],
 }

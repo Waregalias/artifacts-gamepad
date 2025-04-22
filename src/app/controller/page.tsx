@@ -15,6 +15,7 @@ import {toast} from "@/components/ui/use-toast";
 import {Button} from "@/components/ui/button";
 import {Spinner} from "@/components/ui/kibo-ui/spinner";
 import {actionManager} from "@/app/controller/components/actions/ActionManager";
+import './style.css';
 
 function ControllerPage() {
   const [loadingRefresh, setLoadingRefresh] = useState<boolean>(false)
@@ -42,21 +43,35 @@ function ControllerPage() {
   }
 
   function handleGamePadEvent(newAction: { [key: string]: boolean }) {
+    // Initial check for loadingEvent - good practice
     if (loadingEvent) {
       return;
     }
+
     const actions = Object.fromEntries(Object.entries(newAction).filter(([, value]) => value));
     const newActions = Object.keys(actions);
+
     if (newActions.length > 0) {
       newActions.forEach((key: string) => {
         setLoadingEvent(true);
-        actionManager(apiKey, currentCharacter, key).then((character: ArtifactCharacter) => {
-          updateArtifactCharacter(apiKey, character);
-          setLoadingEvent(false);
-        });
+        actionManager(apiKey, currentCharacter, key)
+          .then((result: ArtifactCharacter | void) => {
+            if (result) {
+              updateArtifactCharacter(apiKey, result);
+            } else {
+              console.log(`Action pour la clé '${key}' terminée, mais pas de mise à jour de personnage reçue.`);
+            }
+          })
+          .catch((error) => {
+            console.error(`Erreur pendant l'exécution de l'action pour la clé '${key}':`, error);
+          })
+          .finally(() => {
+            setLoadingEvent(false);
+          });
       });
     }
   }
+
 
   return (
     <>

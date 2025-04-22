@@ -19,6 +19,50 @@ export const getCharacter = async (apiKey: string, name: string): Promise<Artifa
     });
 }
 
+export const rest = async (apiKey: string, name: string = 'none'): Promise<ArtifactResponse> => {
+  return fetch(`https://api.artifactsmmo.com/my/${name}/action/rest`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+    })
+    .then(res => res.json())
+    .then(json => {
+      if (json.error) {
+        throw new Error(json.error.message, json.error.code);
+      }
+      return json.data;
+    })
+    .catch(err => {
+      throw err;
+    });
+}
+
+export const fight = async (apiKey: string, name: string = 'none'): Promise<ArtifactResponse> => {
+  return fetch(`https://api.artifactsmmo.com/my/${name}/action/fight`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+    })
+    .then(res => res.json())
+    .then(json => {
+      if (json.error) {
+        throw new Error(json.error.message, json.error.code);
+      }
+      return json.data;
+    })
+    .catch(err => {
+      throw err;
+    });
+}
+
 export const move = async (apiKey: string, name: string = 'none', fx: number = 0, fy: number = 0, dx: number, dy: number): Promise<ArtifactResponse> => {
   return fetch(`https://api.artifactsmmo.com/my/${name}/action/move`,
     {
@@ -33,7 +77,7 @@ export const move = async (apiKey: string, name: string = 'none', fx: number = 0
     .then(res => res.json())
     .then(json => {
       if (json.error) {
-        throw new Error(json.error);
+        throw new Error(json.error.message, json.error.code);
       }
       return json.data;
     })

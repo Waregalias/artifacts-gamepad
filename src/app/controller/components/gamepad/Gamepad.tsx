@@ -1,9 +1,8 @@
 import {useEffect, useRef, useState} from 'react';
 import {useGamepads} from 'react-gamepads';
-import {cn} from "@/lib/utils";
 import GamepadSvg from "@/app/controller/components/gamepad/Gamepad.svg";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {controllerToGamePadSVG, Gpad} from "@/app/controller/models/Gamepad.model";
+import './Gamepad.css'
 
 interface GamepadProps {
   loading: boolean;
@@ -52,24 +51,17 @@ function Gamepad({loading, gamePadEvent}: GamepadProps) {
 
   return (
     <>
-      <div className={"flex"}>
-        <Card className={cn("border-0", "w-full")}>
-          <CardHeader>
-            <CardTitle>XBOX Controller</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            <div className="flex w-10/12 items-center space-x-4 rounded-md border pt-2 pb-2 p-6">
-              {!loading && (
-                <GamepadSvg
-                  {...currentButtonsClicked}
-                ></GamepadSvg>
-              )}
-              {loading && (
-                <span>Loading...</span>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+      <div className="flex mt-5 justify-center">
+        <div className="flex w-90 items-center space-x-4 rounded-md border pt-2 pb-2 p-6">
+          {!loading && (
+            <GamepadSvg
+              {...currentButtonsClicked}
+            ></GamepadSvg>
+          )}
+          {loading && (
+            <span>Loading...</span>
+          )}
+        </div>
       </div>
     </>
   )
