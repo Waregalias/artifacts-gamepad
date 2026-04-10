@@ -32,6 +32,7 @@ const gamepadLegend = [
 
 function ControllerPage() {
   const [isElectron, setIsElectron] = useState(false);
+  const [leftMenuOpen, setLeftMenuOpen] = useState(true);
   const [loadingRefresh, setLoadingRefresh] = useState<boolean>(false)
   const [loadingEvent, setLoadingEvent] = useState<boolean>(false)
   const apiKey = useStore((state: { apiKey: string }) => state.apiKey);
@@ -98,7 +99,7 @@ function ControllerPage() {
             className="controller-game-webview"
             src="https://play.artifactsmmo.com/"
             partition="persist:artifacts-mmo"
-            allowpopups={true}
+            allowpopups="true"
             webpreferences="contextIsolation=yes"
           />
         )}
@@ -112,17 +113,21 @@ function ControllerPage() {
           />
         )}
 
-        <div className="controller-float-panel">
+        <div className="controller-menu-toggle">
+          <Button type="button" onClick={() => setLeftMenuOpen((prev) => !prev)}>
+            {leftMenuOpen ? 'Hide' : 'Display'} menu
+          </Button>
+        </div>
+
+        <aside className={`controller-float-panel ${leftMenuOpen ? 'is-open' : 'is-closed'}`}>
           <header className="controller-header">
-            <div>
-              <p className="controller-subtitle">Artifacts MMO</p>
-              <h1>Gamepad Controller Hub</h1>
-            </div>
+            <p className="controller-subtitle">Artifacts MMO</p>
+            <h1>Gamepad Hub</h1>
           </header>
 
-          <aside className="controller-legend">
-            <h2>Légende manette</h2>
-            <p>Actions disponibles avec le mapping actuel.</p>
+          <div className="controller-legend">
+            <h2>Légende</h2>
+            <p>Mapping manette</p>
             <div className="controller-legend-scroll">
               {gamepadLegend.map((item) => (
                 <article key={item.control} className="legend-item">
@@ -131,9 +136,12 @@ function ControllerPage() {
                 </article>
               ))}
             </div>
-            <SettingsForm/>
-          </aside>
+          </div>
 
+          <SettingsForm/>
+        </aside>
+
+        <div className="controller-float-controls">
           <div className="controller-status">
             <span>Position: x-{currentCharacter?.x ?? '-'} ; y-{currentCharacter?.y ?? '-'}</span>
             <Button type={"button"} onClick={refreshCharacter}>
@@ -141,7 +149,6 @@ function ControllerPage() {
               {loadingRefresh && (<Spinner/>)}
             </Button>
           </div>
-
           <Gamepad loading={loadingEvent} gamePadEvent={handleGamePadEvent}/>
         </div>
       </div>

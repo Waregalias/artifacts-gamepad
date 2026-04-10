@@ -26,9 +26,9 @@
 
 .controller-float-panel {
     position: absolute;
-    top: 1rem;
+    top: 4.2rem;
     left: 1rem;
-    width: min(410px, calc(100vw - 2rem));
+    width: min(320px, calc(100vw - 2rem));
     max-height: calc(100% - 2rem);
     border-radius: 22px;
     border: 1px solid rgba(255, 255, 255, 0.22);
@@ -41,6 +41,45 @@
     gap: 0.75rem;
     padding: 0.9rem;
     overflow: hidden;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+.controller-float-panel.is-closed {
+    transform: translateX(-108%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.controller-float-panel.is-open {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.controller-menu-toggle {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 4;
+}
+
+.controller-menu-toggle button {
+    background: rgba(4, 26, 40, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #edfbff;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 0.4rem 0.7rem;
+}
+
+.controller-float-controls {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    width: min(520px, calc(100vw - 2rem));
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .controller-header {
@@ -58,7 +97,7 @@
 
 .controller-header h1 {
     margin: 0;
-    font-size: clamp(1.15rem, 2.2vw, 1.7rem);
+    font-size: clamp(0.95rem, 2vw, 1.2rem);
     line-height: 1.1;
 }
 
@@ -76,13 +115,13 @@
 
 .controller-legend h2 {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 0.9rem;
 }
 
 .controller-legend > p {
     margin: 0;
     opacity: 0.9;
-    font-size: 0.92rem;
+    font-size: 0.74rem;
 }
 
 .controller-legend-scroll {
@@ -101,12 +140,12 @@
 
 .legend-item h3 {
     margin: 0 0 0.2rem;
-    font-size: 0.92rem;
+    font-size: 0.8rem;
 }
 
 .legend-item p {
     margin: 0;
-    font-size: 0.84rem;
+    font-size: 0.7rem;
     opacity: 0.93;
 }
 
@@ -119,13 +158,13 @@
 
 .controller-settings h2 {
     margin: 0;
-    font-size: 0.96rem;
+    font-size: 0.82rem;
 }
 
 .controller-settings > p {
     margin: 0.2rem 0 0.6rem;
     opacity: 0.9;
-    font-size: 0.82rem;
+    font-size: 0.7rem;
 }
 
 .controller-settings-form {
@@ -148,6 +187,7 @@
 .controller-settings label,
 .controller-settings p {
     color: #e8f9ff;
+    font-size: 0.72rem;
 }
 
 .controller-status {
@@ -186,13 +226,29 @@
         border: 0;
     }
 
+    .controller-menu-toggle {
+        position: static;
+        margin: 0.5rem 0 0;
+    }
+
+    .controller-float-controls {
+        position: static;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
     .controller-stage {
-        display: grid;
-        grid-template-rows: 54vh auto;
+        display: flex;
+        flex-direction: column;
     }
 
     .controller-game-iframe {
-        position: relative;
-        height: 100%;
+        position: static;
+        height: 54vh;
+    }
+
+    .controller-game-webview {
+        position: static;
+        height: 54vh;
     }
 }
