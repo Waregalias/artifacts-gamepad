@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="bump @typescript-eslint dependencies to v8.58.1 and update package-lock.json" />
+    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="enable Pages setup in GitHub Actions deploy workflow">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -214,7 +218,7 @@
       <workItem from="1748012339342" duration="1368000" />
       <workItem from="1763488796687" duration="1881000" />
       <workItem from="1775635871491" duration="1533000" />
-      <workItem from="1775839330659" duration="9739000" />
+      <workItem from="1775839330659" duration="10797000" />
     </task>
     <task id="LOCAL-00001" summary="init nextjs project">
       <option name="closed" value="true" />
@@ -456,7 +460,23 @@
       <option name="project" value="LOCAL" />
       <updated>1775860574785</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="add GitHub Pages deployment workflow, configure basePath for GitHub Pages, and include &quot;vaul&quot; dependency">
+      <option name="closed" value="true" />
+      <created>1775860879173</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1775860879174</updated>
+    </task>
+    <task id="LOCAL-00032" summary="enable Pages setup in GitHub Actions deploy workflow">
+      <option name="closed" value="true" />
+      <created>1775861055711</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1775861055711</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -486,8 +506,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="missing icons" />
-    <MESSAGE value="add gamepad to ui" />
     <MESSAGE value="wip: add history of gamepad actions" />
     <MESSAGE value="wip: add api key - next: send api key to controller for sending action" />
     <MESSAGE value="wip: update ui with v0" />
@@ -511,7 +529,9 @@
     <MESSAGE value="update dependencies and improve type usage in UI components" />
     <MESSAGE value="update eslint to v9 and synchronize package-lock dependencies" />
     <MESSAGE value="bump @typescript-eslint dependencies to v8.58.1 and update package-lock.json" />
-    <option name="LAST_COMMIT_MESSAGE" value="bump @typescript-eslint dependencies to v8.58.1 and update package-lock.json" />
+    <MESSAGE value="add GitHub Pages deployment workflow, configure basePath for GitHub Pages, and include &quot;vaul&quot; dependency" />
+    <MESSAGE value="enable Pages setup in GitHub Actions deploy workflow" />
+    <option name="LAST_COMMIT_MESSAGE" value="enable Pages setup in GitHub Actions deploy workflow" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

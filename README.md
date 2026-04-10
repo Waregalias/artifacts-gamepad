@@ -4,7 +4,7 @@
 
 A useful tool for playing Artifacts MMO with your controller.
 
-[View Demo](https://waregalias.github.io/artifacts-gamepad-controller/) ·
+[View Demo](https://waregalias.github.io/artifacts-gamepad/) ·
 [Report Bug](https://github.com/Waregalias/artifacts-gamepad-controller/issues/new?labels=bug&template=bug-report---.md) ·
 [Request Feature](https://github.com/Waregalias/artifacts-gamepad-controller/issues/new?labels=enhancement&template=feature-request---.md)
 

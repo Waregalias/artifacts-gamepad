@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const isGithubPages = process.env.GITHUB_PAGES === "true";
-const repoName = "artifacts-gamepad-controller";
+const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] || "artifacts-gamepad";
+const repoBasePath = isGithubPages ? `/${repoName}` : "";
 
 const nextConfig: NextConfig = {
   output: 'export',
@@ -9,8 +10,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: isGithubPages ? `/${repoName}` : '',
-  assetPrefix: isGithubPages ? `/${repoName}/` : undefined,
+  basePath: repoBasePath,
+  assetPrefix: isGithubPages ? `${repoBasePath}/` : undefined,
 };
 
 export default nextConfig;
