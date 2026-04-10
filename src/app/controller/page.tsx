@@ -1,8 +1,8 @@
 'use client'
 
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {useStore} from "@/app/store";
+import {useCallback, useEffect, useState} from "react";
+import {ControlMode, useStore} from "@/app/store";
 import {ArtifactCharacter} from "@/app/controller/models/artifact.model";
 import {getCharacter} from "@/app/controller/services/api.service";
 import {toast} from "@/components/ui/use-toast";
@@ -11,58 +11,114 @@ import {Spinner} from "@/components/ui/kibo-ui/spinner";
 import {actionManager} from "@/app/controller/components/actions/ActionManager";
 import dynamic from "next/dynamic";
 import SettingsForm from "@/app/components/SettingsForm";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import './style.css';
 
 const Gamepad = dynamic(() => import("@/app/controller/components/gamepad/Gamepad"), {
   ssr: false,
 });
 
+const KeyboardPad = dynamic(() => import("@/app/controller/components/keyboard/KeyboardPad"), {
+  ssr: false,
+});
+
 const gamepadLegend = [
-  {control: "D-Pad Haut", action: "Déplacement vers le nord (Y - 1)."},
-  {control: "D-Pad Bas", action: "Déplacement vers le sud (Y + 1)."},
-  {control: "D-Pad Gauche", action: "Déplacement vers l'ouest (X - 1)."},
-  {control: "D-Pad Droite", action: "Déplacement vers l'est (X + 1)."},
-  {control: "Triangle / Y", action: "Action de repos (`rest`) pour régénérer le personnage."},
-  {control: "Rond / B", action: "Action de combat (`fight`) sur la case courante."},
-  {control: "Croix / A", action: "Réservé (aucune action API déclenchée actuellement)."},
-  {control: "Carré / X", action: "Réservé (aucune action API déclenchée actuellement)."},
-  {control: "L1, R1, L2, R2", action: "Connectés à la manette visuelle, sans action métier associée pour l'instant."},
-  {control: "Start / Select", action: "Affichés dans la manette, sans binding API aujourd'hui."},
+  {control: "D-Pad Up", action: "Move north (Y - 1)."},
+  {control: "D-Pad Down", action: "Move south (Y + 1)."},
+  {control: "D-Pad Left", action: "Move west (X - 1)."},
+  {control: "D-Pad Right", action: "Move east (X + 1)."},
+  {control: "Y / Triangle", action: "Rest action (`rest`)."},
+  {control: "B / Circle", action: "Fight action (`fight`)."},
+  {control: "A / Cross", action: "Reserved (no action mapped)."},
+  {control: "X / Square", action: "Reserved (no action mapped)."},
+  {control: "L1, R1, L2, R2", action: "Visible on pad, currently no API action."},
+  {control: "Start / Select", action: "Visible on pad, currently no API action."},
 ];
+
+const keyboardLegend = [
+  {control: "W / Arrow Up", action: "Move north (Y - 1)."},
+  {control: "S / Arrow Down", action: "Move south (Y + 1)."},
+  {control: "A / Arrow Left", action: "Move west (X - 1)."},
+  {control: "D / Arrow Right", action: "Move east (X + 1)."},
+  {control: "E", action: "Rest action (`rest`)."},
+  {control: "Space", action: "Fight action (`fight`)."},
+];
+
+const keyboardBindings: Record<string, string> = {
+  KeyW: 'directionUp',
+  ArrowUp: 'directionUp',
+  KeyS: 'directionDown',
+  ArrowDown: 'directionDown',
+  KeyA: 'directionLeft',
+  ArrowLeft: 'directionLeft',
+  KeyD: 'directionRight',
+  ArrowRight: 'directionRight',
+  KeyE: 'buttonUp',
+  Space: 'buttonRight',
+};
 
 function ControllerPage() {
   const [isElectron, setIsElectron] = useState(false);
   const [leftMenuOpen, setLeftMenuOpen] = useState(true);
+  const [pressedKeys, setPressedKeys] = useState<string[]>([]);
   const [loadingRefresh, setLoadingRefresh] = useState<boolean>(false)
   const [loadingEvent, setLoadingEvent] = useState<boolean>(false)
-  const apiKey = useStore((state: { apiKey: string }) => state.apiKey);
-  const currentCharacter = useStore((state: { character: ArtifactCharacter }) => state.character);
-  const updateArtifactCharacter = useStore((state: {
-    updateArtifactCharacter: { apiKey: string, name: string }
-  }) => state.updateArtifactCharacter);
+  const apiKey = useStore((state) => state.apiKey);
+  const currentCharacter = useStore((state) => state.character);
+  const controlMode = useStore((state) => state.controlMode);
+  const setControlMode = useStore((state) => state.setControlMode);
+  const updateArtifactCharacter = useStore((state) => state.updateArtifactCharacter);
 
   useEffect(() => {
     setIsElectron(Boolean(window.electronAPI?.isElectron));
   }, []);
 
+  const runAction = useCallback((key: string) => {
+    if (loadingEvent || !apiKey || !currentCharacter?.name) {
+      return;
+    }
+
+    setLoadingEvent(true);
+    actionManager(apiKey, currentCharacter, key)
+      .then((result: ArtifactCharacter | void) => {
+        if (result) {
+          updateArtifactCharacter(apiKey, result);
+        }
+      })
+      .catch((error) => {
+        console.error(`Error while executing '${key}' action:`, error);
+      })
+      .finally(() => {
+        setLoadingEvent(false);
+      });
+  }, [apiKey, currentCharacter, loadingEvent, updateArtifactCharacter]);
+
   function refreshCharacter() {
+    if (!apiKey || !currentCharacter?.name) {
+      toast({
+        title: "Please save your API key and character first.",
+      });
+      return;
+    }
+
     setLoadingRefresh(true);
     getCharacter(
       apiKey,
-      currentCharacter.name,
+      currentCharacter?.name,
     ).then((character: ArtifactCharacter) => {
       updateArtifactCharacter(apiKey, character);
       setLoadingRefresh(false);
     }).catch(() => {
       toast({
-        title: "Error during refresh character, select character again",
+        title: "Error while refreshing character. Please select it again.",
       });
+    }).finally(() => {
+      setLoadingRefresh(false);
     });
   }
 
   function handleGamePadEvent(newAction: { [key: string]: boolean }) {
-    // Initial check for loadingEvent - good practice
-    if (loadingEvent) {
+    if (controlMode !== 'gamepad') {
       return;
     }
 
@@ -70,26 +126,41 @@ function ControllerPage() {
     const newActions = Object.keys(actions);
 
     if (newActions.length > 0) {
-      newActions.forEach((key: string) => {
-        setLoadingEvent(true);
-        actionManager(apiKey, currentCharacter, key)
-          .then((result: ArtifactCharacter | void) => {
-            if (result) {
-              updateArtifactCharacter(apiKey, result);
-            } else {
-              console.log(`Action pour la clé '${key}' terminée, mais pas de mise à jour de personnage reçue.`);
-            }
-          })
-          .catch((error) => {
-            console.error(`Erreur pendant l'exécution de l'action pour la clé '${key}':`, error);
-          })
-          .finally(() => {
-            setLoadingEvent(false);
-          });
-      });
+      runAction(newActions[0]);
     }
   }
 
+  useEffect(() => {
+    if (controlMode !== 'keyboard') {
+      setPressedKeys([]);
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      const mappedAction = keyboardBindings[event.code];
+      if (!mappedAction || event.repeat) {
+        return;
+      }
+      event.preventDefault();
+      setPressedKeys((prev) => (prev.includes(event.code) ? prev : [...prev, event.code]));
+      runAction(mappedAction);
+    };
+
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (!keyboardBindings[event.code]) {
+        return;
+      }
+      setPressedKeys((prev) => prev.filter((key) => key !== event.code));
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+    };
+  }, [controlMode, runAction]);
 
   return (
     <section className="controller-shell">
@@ -125,11 +196,24 @@ function ControllerPage() {
             <h1>Gamepad Hub</h1>
           </header>
 
+          <div className="controller-input-mode">
+            <h2>Input Mode</h2>
+            <Select value={controlMode} onValueChange={(value) => setControlMode(value as ControlMode)}>
+              <SelectTrigger className="controller-mode-select">
+                <SelectValue/>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="gamepad">Gamepad</SelectItem>
+                <SelectItem value="keyboard">Keyboard / Mouse</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="controller-legend">
-            <h2>Légende</h2>
-            <p>Mapping manette</p>
+            <h2>Controls Legend</h2>
+            <p>{controlMode === 'gamepad' ? 'Gamepad mapping' : 'Keyboard mapping'}</p>
             <div className="controller-legend-scroll">
-              {gamepadLegend.map((item) => (
+              {(controlMode === 'gamepad' ? gamepadLegend : keyboardLegend).map((item) => (
                 <article key={item.control} className="legend-item">
                   <h3>{item.control}</h3>
                   <p>{item.action}</p>
@@ -149,7 +233,12 @@ function ControllerPage() {
               {loadingRefresh && (<Spinner/>)}
             </Button>
           </div>
-          <Gamepad loading={loadingEvent} gamePadEvent={handleGamePadEvent}/>
+          {controlMode === 'gamepad' && (
+            <Gamepad loading={loadingEvent} gamePadEvent={handleGamePadEvent}/>
+          )}
+          {controlMode === 'keyboard' && (
+            <KeyboardPad loading={loadingEvent} pressedKeys={pressedKeys}/>
+          )}
         </div>
       </div>
     </section>

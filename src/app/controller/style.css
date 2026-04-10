@@ -101,6 +101,25 @@
     line-height: 1.1;
 }
 
+.controller-input-mode {
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 0.55rem;
+}
+
+.controller-input-mode h2 {
+    margin: 0 0 0.35rem;
+    font-size: 0.82rem;
+}
+
+.controller-mode-select {
+    height: 1.9rem;
+    font-size: 0.74rem;
+    background: rgba(6, 22, 36, 0.88);
+    color: #e7fbff;
+}
+
 .controller-legend {
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.05);
@@ -188,6 +207,26 @@
 .controller-settings p {
     color: #e8f9ff;
     font-size: 0.72rem;
+}
+
+.controller-btn-load {
+    background: #10c7d5;
+    color: #032433;
+    font-weight: 700;
+}
+
+.controller-btn-load:hover {
+    background: #19dae9;
+}
+
+.controller-btn-save {
+    background: #ffbc1f;
+    color: #1c1b1b;
+    font-weight: 700;
+}
+
+.controller-btn-save:hover {
+    background: #ffca4c;
 }
 
 .controller-status {

@@ -29,23 +29,28 @@ const FormSchema = z.object({
 });
 
 function SettingsForm() {
+  const savedApiKey = useStore((state) => state.apiKey);
+  const savedCharacter = useStore((state) => state.character);
+  const saveSettings = useStore((state) => state.saveSettings);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      apiKey: useStore((state: { apiKey: string }) => state.apiKey),
-      name: useStore((state: { character: ArtifactCharacter }) => state.character.name),
+      apiKey: savedApiKey,
+      name: savedCharacter?.name ?? '',
     },
   });
 
-  const initialName = useStore((state: { character: ArtifactCharacter }) => state.character.name);
-  const initialSkin = useStore((state: { character: ArtifactCharacter }) => state.character.skin);
-  const [characters, setCharacters] = useState<ArtifactCharacter[]>([
-    {name: initialName, skin: initialSkin},
-  ]);
+  const [characters, setCharacters] = useState<ArtifactCharacter[]>(
+    savedCharacter?.name ? [savedCharacter] : []
+  );
 
-  const updateArtifactCharacter = useStore((state: {
-    updateArtifactCharacter: (apiKey: string, character: ArtifactCharacter | undefined) => void
-  }) => state.updateArtifactCharacter);
+  React.useEffect(() => {
+    form.reset({
+      apiKey: savedApiKey,
+      name: savedCharacter?.name ?? '',
+    });
+  }, [savedApiKey, savedCharacter, form]);
 
   async function loadCharacters() {
     const apiKey = form.getValues('apiKey');
@@ -53,19 +58,19 @@ function SettingsForm() {
   }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    updateArtifactCharacter(
+    saveSettings(
       data.apiKey,
-      characters.find((character) => character.name === data.name),
+      characters.find((character) => character.name === data.name) ?? savedCharacter ?? null,
     );
     toast({
-      title: "Token and character locally saved. Let's play !",
+      title: "API key and character saved locally.",
     });
   }
 
   return (
     <div className="controller-settings">
       <h2>Settings</h2>
-      <p>Configure ta clé API puis choisis ton personnage.</p>
+      <p>Set your API key and character.</p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="controller-settings-form">
           <div className="controller-settings-api-row">
@@ -78,12 +83,12 @@ function SettingsForm() {
                   <FormControl>
                     <Input placeholder="eyJ0fXAi0i..." {...field} />
                   </FormControl>
-                  <FormDescription>This is your private API Key.</FormDescription>
+                  <FormDescription>This is your private API key.</FormDescription>
                   <FormMessage/>
                 </FormItem>
               )}
             />
-            <Button type={"button"} onClick={loadCharacters}>Load</Button>
+            <Button className="controller-btn-load" type={"button"} onClick={loadCharacters}>Load</Button>
           </div>
 
           <FormField
@@ -134,7 +139,7 @@ function SettingsForm() {
             )}
           />
 
-          <Button type={"submit"}>Save</Button>
+          <Button className="controller-btn-save" type={"submit"}>Save</Button>
         </form>
       </Form>
     </div>

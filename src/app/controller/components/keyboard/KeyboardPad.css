@@ -1,0 +1,44 @@
+.keyboard-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.keyboard-card {
+    width: 100%;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(5, 20, 35, 0.76);
+    padding: 0.75rem;
+}
+
+.keyboard-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.keyboard-key {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 8px;
+    color: #e6f8ff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 0.4rem 0.2rem;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.keyboard-key.is-pressed {
+    background: #00a7d3;
+    color: #02202d;
+    border-color: #55d8ff;
+}
+
+.keyboard-key.key-space {
+    grid-column: span 2;
+}
+
+.keyboard-loading {
+    color: #e5f7ff;
+    font-weight: 600;
+}
