@@ -4,17 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="introduce keyboard support, enhance settings form, and refine UI interactions">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/components/actions/ActionManager.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/components/actions/ActionManager.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/components/gamepad/Gamepad.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/components/gamepad/Gamepad.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/components/gamepad/Gamepad.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/components/gamepad/Gamepad.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/components/keyboard/KeyboardPad.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/components/keyboard/KeyboardPad.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/components/keyboard/KeyboardPad.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/components/keyboard/KeyboardPad.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/models/artifact.model.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/models/artifact.model.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/services/api.service.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/services/api.service.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/style.css" afterDir="false" />
+    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="add pulse feedback for keyboard inputs, map new actions (`gathering`, `transition`), and remove loading indicators">
+      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/electron/preload.js" beforeDir="false" afterPath="$PROJECT_DIR$/electron/preload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/controller/components/gamepad/Gamepad.svg.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/components/gamepad/Gamepad.svg.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/command.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/command.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/textarea.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/textarea.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/webview.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/webview.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,7 +225,7 @@
       <workItem from="1748012339342" duration="1368000" />
       <workItem from="1763488796687" duration="1881000" />
       <workItem from="1775635871491" duration="1533000" />
-      <workItem from="1775839330659" duration="8398000" />
+      <workItem from="1775839330659" duration="9112000" />
     </task>
     <task id="LOCAL-00001" summary="init nextjs project">
       <option name="closed" value="true" />
@@ -435,7 +435,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775857739373</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="add pulse feedback for keyboard inputs, map new actions (`gathering`, `transition`), and remove loading indicators">
+      <option name="closed" value="true" />
+      <created>1775859371443</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1775859371443</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -489,7 +497,8 @@
     <MESSAGE value="add webview support for Electron controller window" />
     <MESSAGE value="add toggleable menu and enhance controller UI layout and styles" />
     <MESSAGE value="introduce keyboard support, enhance settings form, and refine UI interactions" />
-    <option name="LAST_COMMIT_MESSAGE" value="introduce keyboard support, enhance settings form, and refine UI interactions" />
+    <MESSAGE value="add pulse feedback for keyboard inputs, map new actions (`gathering`, `transition`), and remove loading indicators" />
+    <option name="LAST_COMMIT_MESSAGE" value="add pulse feedback for keyboard inputs, map new actions (`gathering`, `transition`), and remove loading indicators" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

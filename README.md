@@ -1,23 +1,12 @@
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/Waregalias/artifacts-gamepad-controller">
-    <img src="public/images/app.webp" alt="Logo" width="526" height="259">
-  </a>
+![Artifacts GamePad](public/images/app.webp)
 
-<h3 align="center">Artifacts GamePad</h3>
+## Artifacts GamePad
 
-  <p align="center">
-    A useful tool for playing Artifacts MMO with your controller
-    <br />
-    <br />
-    <a href="https://waregalias.github.io/artifacts-gamepad-controller">View Demo</a>
-    &middot;
-    <a href="https://github.com/Waregalias/artifacts-gamepad-controller/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    &middot;
-    <a href="https://github.com/Waregalias/artifacts-gamepad-controller/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
-  </p>
-</div>
+A useful tool for playing Artifacts MMO with your controller.
+
+[View Demo](https://waregalias.github.io/artifacts-gamepad-controller) ·
+[Report Bug](https://github.com/Waregalias/artifacts-gamepad-controller/issues/new?labels=bug&template=bug-report---.md) ·
+[Request Feature](https://github.com/Waregalias/artifacts-gamepad-controller/issues/new?labels=enhancement&template=feature-request---.md)
 
 ### Built With
 
@@ -71,7 +60,7 @@ Generated artifacts are written to `release/`.
 ### Login behavior
 
 `play.artifactsmmo.com` authentication can fail in an iframe context because of browser security/cookie policies.
-In desktop mode, use the dedicated **Artifacts MMO** Electron window (top-level context) for reliable login/session handling.
+In desktop mode, this app embeds the game using Electron `webview` with a persistent partition for more reliable login/session handling than a standard iframe.
 <!-- CONTRIBUTING -->
 ## Contributing
 

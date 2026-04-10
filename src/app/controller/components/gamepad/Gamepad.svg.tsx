@@ -1,3 +1,26 @@
+import type * as React from "react";
+
+type GamepadSvgProps = React.SVGProps<SVGSVGElement> & {
+  buttonLeft?: boolean;
+  buttonUp?: boolean;
+  buttonDown?: boolean;
+  buttonRight?: boolean;
+  directionUp?: boolean;
+  directionDown?: boolean;
+  directionLeft?: boolean;
+  directionRight?: boolean;
+  analogLeft?: boolean;
+  analogRight?: boolean;
+  TriggerFrontLeft?: boolean;
+  TriggerFrontRight?: boolean;
+  TriggerBackLeft?: boolean;
+  TriggerBackRight?: boolean;
+  select?: boolean;
+  start?: boolean;
+  activeColor?: string;
+  inactiveColor?: string;
+};
+
 function GamepadSvg({
                       buttonLeft,
                       buttonUp,
@@ -17,9 +40,8 @@ function GamepadSvg({
                       start,
                       activeColor = "#2F80ED",
                       inactiveColor = "#E0E0E0",
-                      notFound,
                       ...props
-                    }: any) {
+                    }: GamepadSvgProps) {
   return (
     <svg width={'100%'} height={'100%'} viewBox="0 -50 1280 950" fill="none" {...props}>
       {/* Original gamepad outline */}
