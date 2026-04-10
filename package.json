@@ -63,7 +63,7 @@
     "electron": "^39.8.5",
     "electron-builder": "^26.0.12",
     "electron-packager": "^17.1.2",
-    "eslint": "^8",
+    "eslint": "^9.39.4",
     "eslint-config-next": "^15.5.15",
     "postcss": "^8",
     "tailwind-merge": "^2.5.4",
