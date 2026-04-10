@@ -118,9 +118,11 @@ export enum ArtifactActionMoveY {
   directionDown = 1,
 }
 
-export enum ArtifactActionButton {
-  buttonUp = 'rest',
-  buttonRight = 'fight',
-  buttonDown = '',
-  buttonLeft = '',
-}
+export const ArtifactActionButtonMap = {
+  buttonUp: 'rest',
+  buttonRight: 'fight',
+  buttonLeft: 'gathering',
+  buttonDown: 'transition',
+} as const;
+
+export type ArtifactButtonAction = typeof ArtifactActionButtonMap[keyof typeof ArtifactActionButtonMap];

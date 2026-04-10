@@ -29,10 +29,10 @@ const gamepadLegend = [
   {control: "D-Pad Right", action: "Move east (X + 1)."},
   {control: "Y / Triangle", action: "Rest action (`rest`)."},
   {control: "B / Circle", action: "Fight action (`fight`)."},
-  {control: "A / Cross", action: "Reserved (no action mapped)."},
-  {control: "X / Square", action: "Reserved (no action mapped)."},
-  {control: "L1, R1, L2, R2", action: "Visible on pad, currently no API action."},
-  {control: "Start / Select", action: "Visible on pad, currently no API action."},
+  {control: "X / Square", action: "Gather action (`gathering`)."},
+  {control: "A / Cross", action: "Transition action (`transition`)."},
+  {control: "L1, R1, L2, R2", action: "Currently not bound to an API action."},
+  {control: "Start / Select", action: "Currently not bound to an API action."},
 ];
 
 const keyboardLegend = [
@@ -42,6 +42,8 @@ const keyboardLegend = [
   {control: "D / Arrow Right", action: "Move east (X + 1)."},
   {control: "E", action: "Rest action (`rest`)."},
   {control: "Space", action: "Fight action (`fight`)."},
+  {control: "Q", action: "Gather action (`gathering`)."},
+  {control: "T", action: "Transition action (`transition`)."},
 ];
 
 const keyboardBindings: Record<string, string> = {
@@ -55,12 +57,16 @@ const keyboardBindings: Record<string, string> = {
   ArrowRight: 'directionRight',
   KeyE: 'buttonUp',
   Space: 'buttonRight',
+  KeyQ: 'buttonLeft',
+  KeyT: 'buttonDown',
 };
 
 function ControllerPage() {
   const [isElectron, setIsElectron] = useState(false);
   const [leftMenuOpen, setLeftMenuOpen] = useState(true);
   const [pressedKeys, setPressedKeys] = useState<string[]>([]);
+  const [lastPressedKey, setLastPressedKey] = useState<string>('');
+  const [lastPressedTick, setLastPressedTick] = useState<number>(0);
   const [loadingRefresh, setLoadingRefresh] = useState<boolean>(false)
   const [loadingEvent, setLoadingEvent] = useState<boolean>(false)
   const apiKey = useStore((state) => state.apiKey);
@@ -143,6 +149,8 @@ function ControllerPage() {
       }
       event.preventDefault();
       setPressedKeys((prev) => (prev.includes(event.code) ? prev : [...prev, event.code]));
+      setLastPressedKey(event.code);
+      setLastPressedTick(Date.now());
       runAction(mappedAction);
     };
 
@@ -234,10 +242,19 @@ function ControllerPage() {
             </Button>
           </div>
           {controlMode === 'gamepad' && (
-            <Gamepad loading={loadingEvent} gamePadEvent={handleGamePadEvent}/>
+            <Gamepad gamePadEvent={handleGamePadEvent}/>
           )}
           {controlMode === 'keyboard' && (
-            <KeyboardPad loading={loadingEvent} pressedKeys={pressedKeys}/>
+            <KeyboardPad
+              pressedKeys={pressedKeys}
+              pulseCode={lastPressedKey}
+              pulseTick={lastPressedTick}
+            />
+          )}
+          {loadingEvent && (
+            <div className="controller-action-spinner">
+              <Spinner/>
+            </div>
           )}
         </div>
       </div>

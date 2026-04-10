@@ -50,6 +50,51 @@ export const fight = async (apiKey: string, name: string = 'none'): Promise<Arti
         'Accept': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
+      body: JSON.stringify({participants: []}),
+    })
+    .then(res => res.json())
+    .then(json => {
+      if (json.error) {
+        throw new Error(json.error.message, json.error.code);
+      }
+      return json.data;
+    })
+    .catch(err => {
+      throw err;
+    });
+}
+
+export const gathering = async (apiKey: string, name: string = 'none'): Promise<ArtifactResponse> => {
+  return fetch(`https://api.artifactsmmo.com/my/${name}/action/gathering`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+    })
+    .then(res => res.json())
+    .then(json => {
+      if (json.error) {
+        throw new Error(json.error.message, json.error.code);
+      }
+      return json.data;
+    })
+    .catch(err => {
+      throw err;
+    });
+}
+
+export const transition = async (apiKey: string, name: string = 'none'): Promise<ArtifactResponse> => {
+  return fetch(`https://api.artifactsmmo.com/my/${name}/action/transition`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
     })
     .then(res => res.json())
     .then(json => {

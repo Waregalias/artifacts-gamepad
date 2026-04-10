@@ -3,8 +3,9 @@
 import './KeyboardPad.css';
 
 interface KeyboardPadProps {
-  loading: boolean;
   pressedKeys: string[];
+  pulseCode: string;
+  pulseTick: number;
 }
 
 const keyLabels: {label: string; code: string}[] = [
@@ -12,6 +13,8 @@ const keyLabels: {label: string; code: string}[] = [
   {label: 'A', code: 'KeyA'},
   {label: 'S', code: 'KeyS'},
   {label: 'D', code: 'KeyD'},
+  {label: 'Q', code: 'KeyQ'},
+  {label: 'T', code: 'KeyT'},
   {label: '↑', code: 'ArrowUp'},
   {label: '←', code: 'ArrowLeft'},
   {label: '↓', code: 'ArrowDown'},
@@ -20,26 +23,24 @@ const keyLabels: {label: string; code: string}[] = [
   {label: 'Space', code: 'Space'},
 ];
 
-function KeyboardPad({loading, pressedKeys}: KeyboardPadProps) {
+function KeyboardPad({pressedKeys, pulseCode, pulseTick}: KeyboardPadProps) {
   return (
     <div className="keyboard-wrap">
       <div className="keyboard-card">
-        {loading && <span className="keyboard-loading">Loading...</span>}
-        {!loading && (
-          <div className="keyboard-grid">
-            {keyLabels.map((item) => {
-              const isPressed = pressedKeys.includes(item.code);
-              return (
-                <div
-                  key={item.code}
-                  className={`keyboard-key ${isPressed ? 'is-pressed' : ''} ${item.code === 'Space' ? 'key-space' : ''}`}
-                >
-                  {item.label}
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <div className="keyboard-grid">
+          {keyLabels.map((item) => {
+            const isPressed = pressedKeys.includes(item.code);
+            const isPulse = pulseCode === item.code;
+            return (
+              <div
+                key={isPulse ? `${item.code}-${pulseTick}` : item.code}
+                className={`keyboard-key ${isPressed ? 'is-pressed' : ''} ${isPulse ? 'is-pulse' : ''} ${item.code === 'Space' ? 'key-space' : ''}`}
+              >
+                {item.label}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

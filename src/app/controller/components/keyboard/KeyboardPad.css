@@ -34,11 +34,25 @@
     border-color: #55d8ff;
 }
 
+.keyboard-key.is-pulse {
+    animation: keyboard-pulse 240ms ease;
+}
+
 .keyboard-key.key-space {
     grid-column: span 2;
 }
 
-.keyboard-loading {
-    color: #e5f7ff;
-    font-weight: 600;
+@keyframes keyboard-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(85, 216, 255, 0.6);
+    }
+    45% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 7px rgba(85, 216, 255, 0.05);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(85, 216, 255, 0);
+    }
 }

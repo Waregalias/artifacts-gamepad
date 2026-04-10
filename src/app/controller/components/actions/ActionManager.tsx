@@ -1,6 +1,7 @@
-import {fight, rest, move} from "@/app/controller/services/api.service";
+import {fight, gathering, move, rest, transition} from "@/app/controller/services/api.service";
 import {
-  ArtifactActionButton,
+  ArtifactActionButtonMap,
+  ArtifactButtonAction,
   ArtifactActionMoveX,
   ArtifactActionMoveY,
   ArtifactCharacter,
@@ -11,57 +12,55 @@ import * as React from "react";
 
 export function actionManager(apiKey: string, currentCharacter: ArtifactCharacter, key: string = '') {
   return new Promise<ArtifactCharacter | void>((resolve, reject) => {
-    const isValidButtonTop = key in ArtifactActionButton;
-    const isValidButtonRight = key in ArtifactActionButton;
+    const buttonAction = ArtifactActionButtonMap[key as keyof typeof ArtifactActionButtonMap] as ArtifactButtonAction | undefined;
     const isValidMoveXKey = key in ArtifactActionMoveX;
     const isValidMoveYKey = key in ArtifactActionMoveY;
 
-    if (isValidButtonTop) {
-      rest(apiKey, currentCharacter.name)
-        .then((res: ArtifactResponse) => {
-          if (res.character) {
-            resolve(res.character);
-          } else {
-            console.warn("La réponse de l'API 'rest' ne contenait pas de données de personnage.");
-            resolve(currentCharacter);
-          }
-        })
-        .catch((err: Error) => {
-          console.error("Erreur pendant l'appel à rest():", err);
-          toast({
-            variant: "destructive",
-            title: "Erreur lors du repos",
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <span className="text-white">{err.message || JSON.stringify(err, null, 2)}</span>
-              </pre>
-            ),
-          });
-          reject(err);
-        })
-    } else if (isValidButtonRight) {
-      fight(apiKey, currentCharacter.name)
-        .then((res: ArtifactResponse) => {
-          if (res.character) {
-            resolve(res.character);
-          } else {
-            console.warn("La réponse de l'API 'move' ne contenait pas de données de personnage.");
-            resolve(currentCharacter);
-          }
-        })
-        .catch((err: Error) => {
-          console.error("Erreur pendant l'appel à fight():", err);
-          toast({
-            variant: "destructive",
-            title: "Erreur lors du combat",
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <span className="text-white">{err.message || JSON.stringify(err, null, 2)}</span>
-              </pre>
-            ),
-          });
-          reject(err);
-        })
+    if (buttonAction) {
+      let actionRequest: Promise<ArtifactResponse>;
+      let actionLabel = '';
+
+      switch (buttonAction) {
+        case 'rest':
+          actionRequest = rest(apiKey, currentCharacter.name);
+          actionLabel = "rest";
+          break;
+        case 'fight':
+          actionRequest = fight(apiKey, currentCharacter.name);
+          actionLabel = "fight";
+          break;
+        case 'gathering':
+          actionRequest = gathering(apiKey, currentCharacter.name);
+          actionLabel = "gathering";
+          break;
+        case 'transition':
+          actionRequest = transition(apiKey, currentCharacter.name);
+          actionLabel = "transition";
+          break;
+        default:
+          resolve(currentCharacter);
+          return;
+      }
+
+      actionRequest.then((res: ArtifactResponse) => {
+        if (res.character) {
+          resolve(res.character);
+        } else {
+          resolve(currentCharacter);
+        }
+      }).catch((err: Error) => {
+        console.error(`Error while calling ${actionLabel}():`, err);
+        toast({
+          variant: "destructive",
+          title: `Error while running ${actionLabel}`,
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <span className="text-white">{err.message || JSON.stringify(err, null, 2)}</span>
+            </pre>
+          ),
+        });
+        reject(err);
+      });
     } else if (isValidMoveXKey || isValidMoveYKey) {
       const deltaX = isValidMoveXKey
         ? ArtifactActionMoveX[key as keyof typeof ArtifactActionMoveX]
@@ -83,15 +82,14 @@ export function actionManager(apiKey: string, currentCharacter: ArtifactCharacte
           if (res.character) {
             resolve(res.character);
           } else {
-            console.warn("La réponse de l'API 'move' ne contenait pas de données de personnage.");
             resolve(currentCharacter);
           }
         })
         .catch((error: Error) => {
-          console.error("Erreur pendant l'appel à move():", error);
+          console.error("Error while calling move():", error);
           toast({
             variant: "destructive",
-            title: "Erreur lors du déplacement",
+            title: "Error while moving",
             description: (
               <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
                 <span className="text-white">{error.message || JSON.stringify(error, null, 2)}</span>
@@ -101,7 +99,6 @@ export function actionManager(apiKey: string, currentCharacter: ArtifactCharacte
           reject(error);
         });
     } else {
-      console.log(`La clé '${key}' n'est pas une action de mouvement valide.`);
       resolve(currentCharacter);
     }
   });

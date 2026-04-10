@@ -7,7 +7,6 @@ import {controllerToGamePadSVG, Gpad} from "@/app/controller/models/Gamepad.mode
 import './Gamepad.css'
 
 interface GamepadProps {
-  loading: boolean;
   gamePadEvent: (buttons: { [key: string]: boolean }) => void;
 }
 
@@ -15,7 +14,7 @@ interface GamepadProps {
  * GamePad View
  * @constructor
  */
-function Gamepad({loading, gamePadEvent}: GamepadProps) {
+function Gamepad({gamePadEvent}: GamepadProps) {
   const [gamepads, setGamepads] = useState<Gpad>({});
   const [currentButtonsClicked, setCurrentButtonsClicked] = useState<{ [key: string]: boolean }>({});
   useGamepads(gamepads => setGamepads(gamepads as unknown as Gpad));
@@ -54,14 +53,9 @@ function Gamepad({loading, gamePadEvent}: GamepadProps) {
   return (
     <div className="gamepad-wrap">
       <div className="gamepad-card">
-        {!loading && (
-          <GamepadSvg
-            {...currentButtonsClicked}
-          ></GamepadSvg>
-        )}
-        {loading && (
-          <span className="gamepad-loading">Loading...</span>
-        )}
+        <GamepadSvg
+          {...currentButtonsClicked}
+        ></GamepadSvg>
       </div>
     </div>
   )
