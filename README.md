@@ -28,27 +28,50 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run desktop mode in development (Next + Electron):
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run web only:
+
+```bash
+npm run dev:web
+```
 
 ### Electron
 
-To package app to electron, run:
+Build Electron app (current platform):
 
 ```bash
 npm run package
 ```
+
+Build macOS packages:
+
+```bash
+npm run dist:mac
+```
+
+Build Windows packages:
+
+```bash
+npm run dist:win
+```
+
+Generated artifacts are written to `release/`.
+
+### Login behavior
+
+`play.artifactsmmo.com` authentication can fail in an iframe context because of browser security/cookie policies.
+In desktop mode, use the dedicated **Artifacts MMO** Electron window (top-level context) for reliable login/session handling.
 <!-- CONTRIBUTING -->
 ## Contributing
 

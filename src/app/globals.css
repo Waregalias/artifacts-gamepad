@@ -71,6 +71,17 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    font-family: "Rajdhani", "Avenir Next", "Segoe UI", sans-serif;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(21, 196, 204, 0.35) 0%, rgba(21, 196, 204, 0) 40%),
+      radial-gradient(circle at 85% 75%, rgba(9, 153, 220, 0.35) 0%, rgba(9, 153, 220, 0) 42%),
+      linear-gradient(135deg, #052b38 0%, #0a4b5c 45%, #0b6d87 100%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: "Orbitron", "Arial Black", "Avenir Next Condensed", sans-serif;
   }
 }

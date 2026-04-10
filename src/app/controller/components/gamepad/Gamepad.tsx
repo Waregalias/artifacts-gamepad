@@ -1,3 +1,5 @@
+'use client'
+
 import {useEffect, useRef, useState} from 'react';
 import {useGamepads} from 'react-gamepads';
 import GamepadSvg from "@/app/controller/components/gamepad/Gamepad.svg";
@@ -50,20 +52,18 @@ function Gamepad({loading, gamePadEvent}: GamepadProps) {
   }, [currentButtonsClicked, gamePadEvent]);
 
   return (
-    <>
-      <div className="flex mt-5 justify-center">
-        <div className="flex w-90 items-center space-x-4 rounded-md border pt-2 pb-2 p-6">
-          {!loading && (
-            <GamepadSvg
-              {...currentButtonsClicked}
-            ></GamepadSvg>
-          )}
-          {loading && (
-            <span>Loading...</span>
-          )}
-        </div>
+    <div className="gamepad-wrap">
+      <div className="gamepad-card">
+        {!loading && (
+          <GamepadSvg
+            {...currentButtonsClicked}
+          ></GamepadSvg>
+        )}
+        {loading && (
+          <span className="gamepad-loading">Loading...</span>
+        )}
       </div>
-    </>
+    </div>
   )
 }
 

@@ -1,4 +1,197 @@
-.controller {
-    margin: 0 auto;
+.controller-shell {
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+.controller-stage {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 2rem);
+    border-radius: 26px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(2, 13, 24, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: #04151f;
+}
+
+.controller-game-iframe {
     border: 0;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: #03131e;
+}
+
+.controller-float-panel {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    width: min(410px, calc(100vw - 2rem));
+    max-height: calc(100% - 2rem);
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background:
+      linear-gradient(180deg, rgba(4, 26, 40, 0.95) 0%, rgba(8, 41, 56, 0.93) 100%);
+    backdrop-filter: blur(8px);
+    color: #f0fbff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.9rem;
+    overflow: hidden;
+}
+
+.controller-header {
+    color: #eafcff;
+}
+
+.controller-subtitle {
+    margin: 0 0 0.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.68rem;
+    font-weight: 700;
+    opacity: 0.85;
+}
+
+.controller-header h1 {
+    margin: 0;
+    font-size: clamp(1.15rem, 2.2vw, 1.7rem);
+    line-height: 1.1;
+}
+
+.controller-legend {
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #f0fbff;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    overflow: hidden;
+}
+
+.controller-legend h2 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.controller-legend > p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.92rem;
+}
+
+.controller-legend-scroll {
+    overflow: auto;
+    max-height: 155px;
+    padding-right: 0.2rem;
+}
+
+.legend-item {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.55rem;
+    margin-bottom: 0.45rem;
+}
+
+.legend-item h3 {
+    margin: 0 0 0.2rem;
+    font-size: 0.92rem;
+}
+
+.legend-item p {
+    margin: 0;
+    font-size: 0.84rem;
+    opacity: 0.93;
+}
+
+.controller-settings {
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.65rem;
+}
+
+.controller-settings h2 {
+    margin: 0;
+    font-size: 0.96rem;
+}
+
+.controller-settings > p {
+    margin: 0.2rem 0 0.6rem;
+    opacity: 0.9;
+    font-size: 0.82rem;
+}
+
+.controller-settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.controller-settings-api-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.45rem;
+}
+
+.controller-settings-api-input {
+    flex: 1;
+}
+
+.controller-settings .text-sm,
+.controller-settings label,
+.controller-settings p {
+    color: #e8f9ff;
+}
+
+.controller-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.9rem;
+    background: rgba(5, 20, 35, 0.75);
+    color: #e5f8ff;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.88rem;
+}
+
+.controller-status button {
+    background: #ffbb0f;
+    color: #1c1c1c;
+    font-weight: 700;
+}
+
+@media (max-width: 920px) {
+    .controller-shell {
+        padding: 0.55rem;
+    }
+
+    .controller-stage {
+        min-height: calc(100vh - 1.1rem);
+    }
+
+    .controller-float-panel {
+        position: static;
+        width: 100%;
+        max-height: none;
+        border-radius: 0;
+        border: 0;
+    }
+
+    .controller-stage {
+        display: grid;
+        grid-template-rows: 54vh auto;
+    }
+
+    .controller-game-iframe {
+        position: relative;
+        height: 100%;
+    }
 }

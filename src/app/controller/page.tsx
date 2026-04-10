@@ -3,19 +3,32 @@
 import * as React from "react";
 import {useState} from "react";
 import {useStore} from "@/app/store";
-import {
-  ArtifactActionMoveX,
-  ArtifactActionMoveY,
-  ArtifactCharacter,
-  ArtifactResponse
-} from "@/app/controller/models/artifact.model";
-import Gamepad from "@/app/controller/components/gamepad/Gamepad";
-import {getCharacter, move} from "@/app/controller/services/api.service";
+import {ArtifactCharacter} from "@/app/controller/models/artifact.model";
+import {getCharacter} from "@/app/controller/services/api.service";
 import {toast} from "@/components/ui/use-toast";
 import {Button} from "@/components/ui/button";
 import {Spinner} from "@/components/ui/kibo-ui/spinner";
 import {actionManager} from "@/app/controller/components/actions/ActionManager";
+import dynamic from "next/dynamic";
+import SettingsForm from "@/app/components/SettingsForm";
 import './style.css';
+
+const Gamepad = dynamic(() => import("@/app/controller/components/gamepad/Gamepad"), {
+  ssr: false,
+});
+
+const gamepadLegend = [
+  {control: "D-Pad Haut", action: "Déplacement vers le nord (Y - 1)."},
+  {control: "D-Pad Bas", action: "Déplacement vers le sud (Y + 1)."},
+  {control: "D-Pad Gauche", action: "Déplacement vers l'ouest (X - 1)."},
+  {control: "D-Pad Droite", action: "Déplacement vers l'est (X + 1)."},
+  {control: "Triangle / Y", action: "Action de repos (`rest`) pour régénérer le personnage."},
+  {control: "Rond / B", action: "Action de combat (`fight`) sur la case courante."},
+  {control: "Croix / A", action: "Réservé (aucune action API déclenchée actuellement)."},
+  {control: "Carré / X", action: "Réservé (aucune action API déclenchée actuellement)."},
+  {control: "L1, R1, L2, R2", action: "Connectés à la manette visuelle, sans action métier associée pour l'instant."},
+  {control: "Start / Select", action: "Affichés dans la manette, sans binding API aujourd'hui."},
+];
 
 function ControllerPage() {
   const [loadingRefresh, setLoadingRefresh] = useState<boolean>(false)
@@ -25,7 +38,6 @@ function ControllerPage() {
   const updateArtifactCharacter = useStore((state: {
     updateArtifactCharacter: { apiKey: string, name: string }
   }) => state.updateArtifactCharacter);
-
 
   function refreshCharacter() {
     setLoadingRefresh(true);
@@ -74,16 +86,50 @@ function ControllerPage() {
 
 
   return (
-    <>
-      <div className="w-full flex justify-end items-center">
-        <span className={"mr-5"}>Your position: x-{currentCharacter.x} ; y-{currentCharacter.y}</span>
-        <Button className={"mr-5"} type={"button"} onClick={refreshCharacter}>
-          {!loadingRefresh && (<span>Refresh</span>)}
-          {loadingRefresh && (<Spinner/>)}
-        </Button>
+    <section className="controller-shell">
+      <div className="controller-stage">
+        <iframe
+          className="controller-game-iframe"
+          src="https://play.artifactsmmo.com/"
+          title="Artifacts MMO"
+          loading="lazy"
+          allow="fullscreen; clipboard-read; clipboard-write"
+        />
+
+        <div className="controller-float-panel">
+          <header className="controller-header">
+            <div>
+              <p className="controller-subtitle">Artifacts MMO</p>
+              <h1>Gamepad Controller Hub</h1>
+            </div>
+          </header>
+
+          <aside className="controller-legend">
+            <h2>Légende manette</h2>
+            <p>Actions disponibles avec le mapping actuel.</p>
+            <div className="controller-legend-scroll">
+              {gamepadLegend.map((item) => (
+                <article key={item.control} className="legend-item">
+                  <h3>{item.control}</h3>
+                  <p>{item.action}</p>
+                </article>
+              ))}
+            </div>
+            <SettingsForm/>
+          </aside>
+
+          <div className="controller-status">
+            <span>Position: x-{currentCharacter?.x ?? '-'} ; y-{currentCharacter?.y ?? '-'}</span>
+            <Button type={"button"} onClick={refreshCharacter}>
+              {!loadingRefresh && (<span>Refresh</span>)}
+              {loadingRefresh && (<Spinner/>)}
+            </Button>
+          </div>
+
+          <Gamepad loading={loadingEvent} gamePadEvent={handleGamePadEvent}/>
+        </div>
       </div>
-      <Gamepad loading={loadingEvent} gamePadEvent={handleGamePadEvent}></Gamepad>
-    </>
+    </section>
   )
 }
 

@@ -4,12 +4,20 @@
   "private": false,
   "main": "main.js",
   "scripts": {
-    "dev": "next dev --turbo",
-    "build": "next build",
+    "dev": "npm run dev:desktop",
+    "dev:web": "next dev --turbo -p 3000",
+    "dev:electron": "wait-on tcp:3000 && electron .",
+    "dev:desktop": "concurrently -k \"npm:dev:web\" \"npm:dev:electron\"",
+    "build": "npm run build:web",
+    "build:web": "next build",
+    "build:desktop": "npm run build:web && electron-builder",
+    "dist:mac": "npm run build:web && electron-builder --mac",
+    "dist:win": "npm run build:web && electron-builder --win",
     "start": "next start",
+    "start:desktop": "electron .",
     "lint": "next lint",
     "electron": "electron .",
-    "package": "electron-packager ."
+    "package": "npm run build:desktop"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -50,7 +58,9 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "concurrently": "^9.2.1",
     "electron": "^35.1.5",
+    "electron-builder": "^26.0.12",
     "electron-packager": "^17.1.2",
     "eslint": "^8",
     "eslint-config-next": "15.0.0",
@@ -58,6 +68,37 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wait-on": "^8.0.3"
+  },
+  "build": {
+    "appId": "com.artifacts.gamepad",
+    "productName": "Artifacts Gamepad Controller",
+    "files": [
+      "main.js",
+      "electron/**/*",
+      "out/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.games"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }

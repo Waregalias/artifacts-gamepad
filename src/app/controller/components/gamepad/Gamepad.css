@@ -1,3 +1,27 @@
-.w-90 {
-    width: 90%;
+.gamepad-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.gamepad-card {
+    width: 100%;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(5, 20, 35, 0.76);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0.75rem 0.95rem;
+}
+
+.gamepad-card svg {
+    width: 33.33%;
+    max-width: 320px;
+    min-width: 170px;
+    height: auto;
+}
+
+.gamepad-loading {
+    color: #e5f7ff;
+    font-weight: 600;
 }
