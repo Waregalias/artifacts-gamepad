@@ -4,7 +4,7 @@
 
 A useful tool for playing Artifacts MMO with your controller.
 
-[View Demo](https://waregalias.github.io/artifacts-gamepad-controller) ·
+[View Demo](https://waregalias.github.io/artifacts-gamepad-controller/) ·
 [Report Bug](https://github.com/Waregalias/artifacts-gamepad-controller/issues/new?labels=bug&template=bug-report---.md) ·
 [Request Feature](https://github.com/Waregalias/artifacts-gamepad-controller/issues/new?labels=enhancement&template=feature-request---.md)
 
@@ -34,6 +34,16 @@ Run web only:
 ```bash
 npm run dev:web
 ```
+
+### GitHub Pages demo
+
+The demo is deployed automatically by GitHub Actions from `.github/workflows/deploy-pages.yml`.
+
+Repository settings required once:
+
+1. Go to `Settings` → `Pages`.
+2. In `Build and deployment`, set `Source` to `GitHub Actions`.
+3. Push to `main` (or run the workflow manually from `Actions`).
 
 ### Electron
 
