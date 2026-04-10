@@ -16,6 +16,7 @@ function createControllerWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
+      webviewTag: true,
       preload: path.join(__dirname, 'electron', 'preload.js'),
     },
   });

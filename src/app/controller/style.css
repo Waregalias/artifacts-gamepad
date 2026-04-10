@@ -14,7 +14,8 @@
     background: #04151f;
 }
 
-.controller-game-iframe {
+.controller-game-iframe,
+.controller-game-webview {
     border: 0;
     position: absolute;
     inset: 0;

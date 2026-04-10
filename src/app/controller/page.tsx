@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useStore} from "@/app/store";
 import {ArtifactCharacter} from "@/app/controller/models/artifact.model";
 import {getCharacter} from "@/app/controller/services/api.service";
@@ -31,6 +31,7 @@ const gamepadLegend = [
 ];
 
 function ControllerPage() {
+  const [isElectron, setIsElectron] = useState(false);
   const [loadingRefresh, setLoadingRefresh] = useState<boolean>(false)
   const [loadingEvent, setLoadingEvent] = useState<boolean>(false)
   const apiKey = useStore((state: { apiKey: string }) => state.apiKey);
@@ -38,6 +39,10 @@ function ControllerPage() {
   const updateArtifactCharacter = useStore((state: {
     updateArtifactCharacter: { apiKey: string, name: string }
   }) => state.updateArtifactCharacter);
+
+  useEffect(() => {
+    setIsElectron(Boolean(window.electronAPI?.isElectron));
+  }, []);
 
   function refreshCharacter() {
     setLoadingRefresh(true);
@@ -88,13 +93,24 @@ function ControllerPage() {
   return (
     <section className="controller-shell">
       <div className="controller-stage">
-        <iframe
-          className="controller-game-iframe"
-          src="https://play.artifactsmmo.com/"
-          title="Artifacts MMO"
-          loading="lazy"
-          allow="fullscreen; clipboard-read; clipboard-write"
-        />
+        {isElectron && (
+          <webview
+            className="controller-game-webview"
+            src="https://play.artifactsmmo.com/"
+            partition="persist:artifacts-mmo"
+            allowpopups={true}
+            webpreferences="contextIsolation=yes"
+          />
+        )}
+        {!isElectron && (
+          <iframe
+            className="controller-game-iframe"
+            src="https://play.artifactsmmo.com/"
+            title="Artifacts MMO"
+            loading="lazy"
+            allow="fullscreen; clipboard-read; clipboard-write"
+          />
+        )}
 
         <div className="controller-float-panel">
           <header className="controller-header">
