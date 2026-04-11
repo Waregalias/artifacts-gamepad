@@ -18,6 +18,7 @@
 }
 
 .keyboard-key {
+    appearance: none;
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 8px;
     color: #e6f8ff;
@@ -26,6 +27,7 @@
     text-align: center;
     padding: 0.4rem 0.2rem;
     background: rgba(255, 255, 255, 0.04);
+    cursor: pointer;
 }
 
 .keyboard-key.is-pressed {
@@ -40,6 +42,16 @@
 
 .keyboard-key.key-space {
     grid-column: span 2;
+}
+
+.keyboard-key.key-custom {
+    background: #ffbc1f;
+    color: #1f1a0f;
+    border-color: #ffd76f;
+}
+
+.keyboard-key.key-custom:hover {
+    background: #ffcb46;
 }
 
 @keyframes keyboard-pulse {

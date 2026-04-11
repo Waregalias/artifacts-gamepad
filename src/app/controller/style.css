@@ -73,14 +73,30 @@
 
 .controller-float-controls {
     position: absolute;
-    right: 1rem;
-    bottom: 1rem;
     width: min(520px, calc(100vw - 2rem));
     z-index: 4;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     padding-bottom: 1.8rem;
+}
+
+.controller-controls-drag {
+    align-self: flex-end;
+    background: rgba(4, 26, 40, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #edfbff;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 0.3rem 0.65rem;
+    cursor: grab;
+    user-select: none;
+}
+
+.controller-controls-drag:active {
+    cursor: grabbing;
 }
 
 .controller-action-spinner {
@@ -256,6 +272,33 @@
     font-weight: 700;
 }
 
+.controller-custom-modal {
+    max-width: 680px;
+}
+
+.controller-custom-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.controller-custom-label {
+    display: inline-block;
+    margin-bottom: 0.3rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.controller-custom-textarea {
+    min-height: 120px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.78rem;
+}
+
+.controller-custom-response {
+    min-height: 180px;
+}
+
 @media (max-width: 920px) {
     .controller-shell {
         padding: 0.55rem;
@@ -282,6 +325,11 @@
         position: static;
         width: 100%;
         margin-top: 0.5rem;
+        padding-bottom: 0;
+    }
+
+    .controller-controls-drag {
+        display: none;
     }
 
     .controller-action-spinner {
