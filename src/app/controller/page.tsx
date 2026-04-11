@@ -60,6 +60,95 @@ const keyboardBindings: Record<string, string> = {
   KeyT: 'buttonDown',
 };
 
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+
+type CustomRoutePreset = {
+  key: string;
+  method: HttpMethod;
+  apiPath: string;
+};
+
+const availableCustomRoutes: CustomRoutePreset[] = [
+  {key: 'GET /my/characters', method: 'GET', apiPath: '/my/characters'},
+  {key: 'GET /my/details', method: 'GET', apiPath: '/my/details'},
+  {key: 'GET /my/bank', method: 'GET', apiPath: '/my/bank'},
+  {key: 'GET /my/bank/items', method: 'GET', apiPath: '/my/bank/items'},
+  {key: 'GET /my/grandexchange/orders', method: 'GET', apiPath: '/my/grandexchange/orders'},
+  {key: 'GET /my/grandexchange/history', method: 'GET', apiPath: '/my/grandexchange/history'},
+  {key: 'GET /my/pending-items', method: 'GET', apiPath: '/my/pending-items'},
+  {key: 'GET /my/logs', method: 'GET', apiPath: '/my/logs'},
+  {key: 'GET /my/logs/{name}', method: 'GET', apiPath: '/my/logs/{name}'},
+  {key: 'POST /my/change_password', method: 'POST', apiPath: '/my/change_password'},
+  {key: 'POST /my/{name}/action/bank/buy_expansion', method: 'POST', apiPath: '/my/{name}/action/bank/buy_expansion'},
+  {key: 'POST /my/{name}/action/bank/deposit/gold', method: 'POST', apiPath: '/my/{name}/action/bank/deposit/gold'},
+  {key: 'POST /my/{name}/action/bank/deposit/item', method: 'POST', apiPath: '/my/{name}/action/bank/deposit/item'},
+  {key: 'POST /my/{name}/action/bank/withdraw/gold', method: 'POST', apiPath: '/my/{name}/action/bank/withdraw/gold'},
+  {key: 'POST /my/{name}/action/bank/withdraw/item', method: 'POST', apiPath: '/my/{name}/action/bank/withdraw/item'},
+  {key: 'POST /my/{name}/action/change_skin', method: 'POST', apiPath: '/my/{name}/action/change_skin'},
+  {key: 'POST /my/{name}/action/claim_item/{id}', method: 'POST', apiPath: '/my/{name}/action/claim_item/{id}'},
+  {key: 'POST /my/{name}/action/crafting', method: 'POST', apiPath: '/my/{name}/action/crafting'},
+  {key: 'POST /my/{name}/action/delete', method: 'POST', apiPath: '/my/{name}/action/delete'},
+  {key: 'POST /my/{name}/action/equip', method: 'POST', apiPath: '/my/{name}/action/equip'},
+  {key: 'POST /my/{name}/action/fight', method: 'POST', apiPath: '/my/{name}/action/fight'},
+  {key: 'POST /my/{name}/action/gathering', method: 'POST', apiPath: '/my/{name}/action/gathering'},
+  {key: 'POST /my/{name}/action/give/gold', method: 'POST', apiPath: '/my/{name}/action/give/gold'},
+  {key: 'POST /my/{name}/action/give/item', method: 'POST', apiPath: '/my/{name}/action/give/item'},
+  {key: 'POST /my/{name}/action/grandexchange/buy', method: 'POST', apiPath: '/my/{name}/action/grandexchange/buy'},
+  {key: 'POST /my/{name}/action/grandexchange/cancel', method: 'POST', apiPath: '/my/{name}/action/grandexchange/cancel'},
+  {key: 'POST /my/{name}/action/grandexchange/create-buy-order', method: 'POST', apiPath: '/my/{name}/action/grandexchange/create-buy-order'},
+  {key: 'POST /my/{name}/action/grandexchange/create-sell-order', method: 'POST', apiPath: '/my/{name}/action/grandexchange/create-sell-order'},
+  {key: 'POST /my/{name}/action/grandexchange/fill', method: 'POST', apiPath: '/my/{name}/action/grandexchange/fill'},
+  {key: 'POST /my/{name}/action/move', method: 'POST', apiPath: '/my/{name}/action/move'},
+  {key: 'POST /my/{name}/action/npc/buy', method: 'POST', apiPath: '/my/{name}/action/npc/buy'},
+  {key: 'POST /my/{name}/action/npc/sell', method: 'POST', apiPath: '/my/{name}/action/npc/sell'},
+  {key: 'POST /my/{name}/action/recycling', method: 'POST', apiPath: '/my/{name}/action/recycling'},
+  {key: 'POST /my/{name}/action/rest', method: 'POST', apiPath: '/my/{name}/action/rest'},
+  {key: 'POST /my/{name}/action/task/cancel', method: 'POST', apiPath: '/my/{name}/action/task/cancel'},
+  {key: 'POST /my/{name}/action/task/complete', method: 'POST', apiPath: '/my/{name}/action/task/complete'},
+  {key: 'POST /my/{name}/action/task/exchange', method: 'POST', apiPath: '/my/{name}/action/task/exchange'},
+  {key: 'POST /my/{name}/action/task/new', method: 'POST', apiPath: '/my/{name}/action/task/new'},
+  {key: 'POST /my/{name}/action/task/trade', method: 'POST', apiPath: '/my/{name}/action/task/trade'},
+  {key: 'POST /my/{name}/action/transition', method: 'POST', apiPath: '/my/{name}/action/transition'},
+  {key: 'POST /my/{name}/action/unequip', method: 'POST', apiPath: '/my/{name}/action/unequip'},
+  {key: 'POST /my/{name}/action/use', method: 'POST', apiPath: '/my/{name}/action/use'},
+];
+
+const routeQueryTemplates: Record<string, string> = {
+  '/my/bank/items': 'item_code=wooden_sword&page=1&size=20',
+  '/my/grandexchange/orders': 'code=wooden_sword&type=buy&page=1&size=20',
+  '/my/grandexchange/history': 'id=order_id&code=wooden_sword&page=1&size=20',
+  '/my/pending-items': 'page=1&size=20',
+  '/my/logs': 'page=1&size=20',
+  '/my/logs/{name}': 'page=1&size=20',
+};
+
+const routeBodyTemplates: Record<string, string> = {
+  '/my/change_password': JSON.stringify({current_password: 'current_password', new_password: 'new_password'}, null, 2),
+  '/my/{name}/action/move': JSON.stringify({x: 1, y: 1}, null, 2),
+  '/my/{name}/action/equip': JSON.stringify({code: 'wooden_sword', slot: 'weapon_slot', quantity: 1}, null, 2),
+  '/my/{name}/action/unequip': JSON.stringify({slot: 'weapon_slot', quantity: 1}, null, 2),
+  '/my/{name}/action/use': JSON.stringify({code: 'small_health_potion', quantity: 1}, null, 2),
+  '/my/{name}/action/fight': JSON.stringify({participants: []}, null, 2),
+  '/my/{name}/action/crafting': JSON.stringify({code: 'copper_bar', quantity: 1}, null, 2),
+  '/my/{name}/action/bank/deposit/gold': JSON.stringify({quantity: 100}, null, 2),
+  '/my/{name}/action/bank/deposit/item': JSON.stringify({code: 'copper_ore', quantity: 1}, null, 2),
+  '/my/{name}/action/bank/withdraw/item': JSON.stringify({code: 'copper_ore', quantity: 1}, null, 2),
+  '/my/{name}/action/bank/withdraw/gold': JSON.stringify({quantity: 100}, null, 2),
+  '/my/{name}/action/npc/buy': JSON.stringify({code: 'small_health_potion', quantity: 1}, null, 2),
+  '/my/{name}/action/npc/sell': JSON.stringify({code: 'small_health_potion', quantity: 1}, null, 2),
+  '/my/{name}/action/recycling': JSON.stringify({code: 'copper_sword', quantity: 1}, null, 2),
+  '/my/{name}/action/grandexchange/buy': JSON.stringify({id: 'order_id', quantity: 1}, null, 2),
+  '/my/{name}/action/grandexchange/create-sell-order': JSON.stringify({code: 'copper_ore', quantity: 10, price: 5}, null, 2),
+  '/my/{name}/action/grandexchange/cancel': JSON.stringify({id: 'order_id'}, null, 2),
+  '/my/{name}/action/grandexchange/create-buy-order': JSON.stringify({code: 'copper_ore', quantity: 10, price: 5}, null, 2),
+  '/my/{name}/action/grandexchange/fill': JSON.stringify({id: 'order_id', quantity: 1}, null, 2),
+  '/my/{name}/action/task/trade': JSON.stringify({code: 'task_token', quantity: 1}, null, 2),
+  '/my/{name}/action/give/gold': JSON.stringify({character: 'target_character', quantity: 1}, null, 2),
+  '/my/{name}/action/give/item': JSON.stringify({character: 'target_character', items: [{code: 'copper_ore', quantity: 1}]}, null, 2),
+  '/my/{name}/action/delete': JSON.stringify({code: 'copper_ore', quantity: 1}, null, 2),
+  '/my/{name}/action/change_skin': JSON.stringify({skin: 'men1'}, null, 2),
+};
+
 function ControllerPage() {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const controlsRef = useRef<HTMLDivElement | null>(null);
@@ -75,7 +164,8 @@ function ControllerPage() {
   const [loadingRefresh, setLoadingRefresh] = useState<boolean>(false)
   const [loadingEvent, setLoadingEvent] = useState<boolean>(false)
   const [customModalOpen, setCustomModalOpen] = useState(false);
-  const [customMethod, setCustomMethod] = useState<'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'>('POST');
+  const [customMethod, setCustomMethod] = useState<HttpMethod>('POST');
+  const [customRoutePreset, setCustomRoutePreset] = useState('POST /my/{name}/action/unequip');
   const [customRoute, setCustomRoute] = useState('/action/unequip');
   const [customPayload, setCustomPayload] = useState('');
   const [customSending, setCustomSending] = useState(false);
@@ -332,7 +422,9 @@ function ControllerPage() {
     }
 
     const normalizedRoute = route.startsWith('/') ? route : `/${route}`;
-    const baseUrl = `https://api.artifactsmmo.com/my/${currentCharacter.name}${normalizedRoute}`;
+    const baseUrl = normalizedRoute.startsWith('/my/')
+      ? `https://api.artifactsmmo.com${normalizedRoute}`
+      : `https://api.artifactsmmo.com/my/${currentCharacter.name}${normalizedRoute}`;
     const isReadMode = customMethod === 'GET' || customMethod === 'DELETE';
     let finalUrl = baseUrl;
     const requestInit: RequestInit = {
@@ -353,7 +445,7 @@ function ControllerPage() {
           });
           const queryString = search.toString();
           if (queryString) {
-            finalUrl = `${baseUrl}?${queryString}`;
+            finalUrl = baseUrl.includes('?') ? `${baseUrl}&${queryString}` : `${baseUrl}?${queryString}`;
           }
         } else {
           requestInit.headers = {
@@ -401,6 +493,37 @@ function ControllerPage() {
     } finally {
       setCustomSending(false);
     }
+  }
+
+  function applyRoutePreset(presetKey: string) {
+    setCustomRoutePreset(presetKey);
+    const selectedRoute = availableCustomRoutes.find((item) => item.key === presetKey);
+    if (!selectedRoute) {
+      return;
+    }
+
+    setCustomMethod(selectedRoute.method);
+
+    let routeInput = selectedRoute.apiPath;
+    if (routeInput.startsWith('/my/{name}')) {
+      routeInput = routeInput.replace('/my/{name}', '');
+    }
+    if (routeInput.includes('{id}')) {
+      routeInput = routeInput.replace('{id}', '1');
+    }
+    if (routeInput.includes('{name}')) {
+      routeInput = routeInput.replace('{name}', currentCharacter?.name || 'character_name');
+    }
+
+    if (selectedRoute.method === 'GET' || selectedRoute.method === 'DELETE') {
+      const queryTemplate = routeQueryTemplates[selectedRoute.apiPath];
+      setCustomRoute(queryTemplate ? `${routeInput}?${queryTemplate}` : routeInput);
+      setCustomPayload('');
+      return;
+    }
+
+    setCustomRoute(routeInput);
+    setCustomPayload(routeBodyTemplates[selectedRoute.apiPath] || '');
   }
 
   useEffect(() => {
@@ -496,7 +619,10 @@ function ControllerPage() {
               pulseCode={lastPressedKey}
               pulseTick={lastPressedTick}
               onVirtualKeyPress={triggerVirtualKey}
-              onOpenCustomModal={() => setCustomModalOpen(true)}
+              onOpenCustomModal={() => {
+                applyRoutePreset(customRoutePreset);
+                setCustomModalOpen(true);
+              }}
             />
           )}
           {loadingEvent && (
@@ -512,14 +638,30 @@ function ControllerPage() {
           <DialogHeader>
             <DialogTitle>Custom API Request</DialogTitle>
             <DialogDescription>
-              Base URL: `https://api.artifactsmmo.com/my/{currentCharacter?.name || 'CHARACTER_NAME'}`
+              Character base: `https://api.artifactsmmo.com/my/{currentCharacter?.name || 'CHARACTER_NAME'}` (you can also use full `/my/...` routes).
             </DialogDescription>
           </DialogHeader>
 
           <div className="controller-custom-grid">
             <div>
+              <label className="controller-custom-label">Route Presets</label>
+              <Select value={customRoutePreset} onValueChange={applyRoutePreset}>
+                <SelectTrigger>
+                  <SelectValue/>
+                </SelectTrigger>
+                <SelectContent>
+                  {availableCustomRoutes.map((item) => (
+                    <SelectItem key={item.key} value={item.key}>
+                      {item.key}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
               <label className="controller-custom-label">Method</label>
-              <Select value={customMethod} onValueChange={(value) => setCustomMethod(value as 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH')}>
+              <Select value={customMethod} onValueChange={(value) => setCustomMethod(value as HttpMethod)}>
                 <SelectTrigger>
                   <SelectValue/>
                 </SelectTrigger>
@@ -534,11 +676,11 @@ function ControllerPage() {
             </div>
 
             <div>
-              <label className="controller-custom-label">Route (after character name)</label>
+              <label className="controller-custom-label">Route</label>
               <Input
                 value={customRoute}
                 onChange={(event) => setCustomRoute(event.target.value)}
-                placeholder="/action/unequip"
+                placeholder="/action/unequip or /my/bank/items?page=1&size=20"
               />
             </div>
 
