@@ -8,6 +8,9 @@ interface KeyboardPadProps {
   pulseTick: number;
   onVirtualKeyPress: (code: string) => void;
   onOpenCustomModal: () => void;
+  customLoopRunning: boolean;
+  customLoopStopping: boolean;
+  onStopCustomLoop: () => void;
 }
 
 const keyLabels: {label: string; code: string}[] = [
@@ -22,7 +25,16 @@ const keyLabels: {label: string; code: string}[] = [
   {label: 'Custom', code: 'CustomAction'},
 ];
 
-function KeyboardPad({pressedKeys, pulseCode, pulseTick, onVirtualKeyPress, onOpenCustomModal}: KeyboardPadProps) {
+function KeyboardPad({
+  pressedKeys,
+  pulseCode,
+  pulseTick,
+  onVirtualKeyPress,
+  onOpenCustomModal,
+  customLoopRunning,
+  customLoopStopping,
+  onStopCustomLoop,
+}: KeyboardPadProps) {
   return (
     <div className="keyboard-wrap">
       <div className="keyboard-card">
@@ -31,14 +43,32 @@ function KeyboardPad({pressedKeys, pulseCode, pulseTick, onVirtualKeyPress, onOp
             const isPressed = pressedKeys.includes(item.code);
             const isPulse = pulseCode === item.code;
             const isCustom = item.code === 'CustomAction';
+            const isLoopButton = isCustom && customLoopRunning;
             return (
               <button
                 type="button"
                 key={isPulse ? `${item.code}-${pulseTick}` : item.code}
-                className={`keyboard-key ${isPressed ? 'is-pressed' : ''} ${isPulse ? 'is-pulse' : ''} ${item.code === 'Space' ? 'key-space' : ''} ${isCustom ? 'key-custom' : ''}`}
-                onClick={() => (isCustom ? onOpenCustomModal() : onVirtualKeyPress(item.code))}
+                className={`keyboard-key ${isPressed ? 'is-pressed' : ''} ${isPulse ? 'is-pulse' : ''} ${item.code === 'Space' ? 'key-space' : ''} ${isCustom ? 'key-custom' : ''} ${isLoopButton ? 'key-custom-loop' : ''}`}
+                onClick={() => {
+                  if (isCustom) {
+                    if (customLoopRunning) {
+                      onStopCustomLoop();
+                    } else {
+                      onOpenCustomModal();
+                    }
+                    return;
+                  }
+                  onVirtualKeyPress(item.code);
+                }}
               >
-                {item.label}
+                {isLoopButton
+                  ? (
+                    <span className="keyboard-loop-content">
+                      <span className={`keyboard-loop-loader ${customLoopStopping ? 'is-stopping' : ''}`}/>
+                      <span>{customLoopStopping ? 'Stopping...' : 'Stop'}</span>
+                    </span>
+                  )
+                  : item.label}
               </button>
             );
           })}

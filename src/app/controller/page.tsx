@@ -68,6 +68,18 @@ type CustomRoutePreset = {
   apiPath: string;
 };
 
+type PreparedCustomRequest = {
+  finalUrl: string;
+  requestInit: RequestInit;
+};
+
+type CustomRequestResult = {
+  status: number;
+  ok: boolean;
+  data: unknown;
+  cooldownSeconds: number;
+};
+
 const availableCustomRoutes: CustomRoutePreset[] = [
   {key: 'GET /my/characters', method: 'GET', apiPath: '/my/characters'},
   {key: 'GET /my/details', method: 'GET', apiPath: '/my/details'},
@@ -170,6 +182,10 @@ function ControllerPage() {
   const [customPayload, setCustomPayload] = useState('');
   const [customSending, setCustomSending] = useState(false);
   const [customResponse, setCustomResponse] = useState('');
+  const [customLoopRunning, setCustomLoopRunning] = useState(false);
+  const [customLoopStopping, setCustomLoopStopping] = useState(false);
+  const customLoopStopRef = useRef(false);
+  const customLoopAbortRef = useRef<AbortController | null>(null);
   const apiKey = useStore((state) => state.apiKey);
   const currentCharacter = useStore((state) => state.character);
   const controlMode = useStore((state) => state.controlMode);
@@ -405,12 +421,12 @@ function ControllerPage() {
     window.addEventListener('pointerup', onUp);
   }
 
-  async function sendCustomRequest() {
+  function buildCustomRequestFromState(): PreparedCustomRequest | null {
     if (!apiKey || !currentCharacter?.name) {
       toast({
         title: "Please save your API key and character first.",
       });
-      return;
+      return null;
     }
 
     const route = customRoute.trim();
@@ -418,7 +434,7 @@ function ControllerPage() {
       toast({
         title: "Route is required.",
       });
-      return;
+      return null;
     }
 
     const normalizedRoute = route.startsWith('/') ? route : `/${route}`;
@@ -459,27 +475,76 @@ function ControllerPage() {
       toast({
         title: `${isReadMode ? 'Params' : 'Body'} must be valid JSON.`,
       });
+      return null;
+    }
+
+    return {
+      finalUrl,
+      requestInit,
+    };
+  }
+
+  function getCooldownSeconds(data: unknown): number {
+    if (!data || typeof data !== 'object') {
+      return 0;
+    }
+    const root = data as {
+      data?: {
+        cooldown?: {
+          remaining_seconds?: number | string;
+        };
+      };
+    };
+    const rawValue = root.data?.cooldown?.remaining_seconds;
+    if (typeof rawValue === 'number' && Number.isFinite(rawValue)) {
+      return Math.max(0, rawValue);
+    }
+    if (typeof rawValue === 'string') {
+      const parsed = Number(rawValue);
+      if (Number.isFinite(parsed)) {
+        return Math.max(0, parsed);
+      }
+    }
+    return 0;
+  }
+
+  async function executeCustomRequest(prepared: PreparedCustomRequest, signal?: AbortSignal): Promise<CustomRequestResult> {
+    const {finalUrl, requestInit} = prepared;
+    const response = await fetch(finalUrl, {...requestInit, signal});
+    const json = await response.json().catch(() => ({}));
+    const result: CustomRequestResult = {
+      status: response.status,
+      ok: response.ok,
+      data: json,
+      cooldownSeconds: getCooldownSeconds(json),
+    };
+    setCustomResponse(JSON.stringify({
+      status: result.status,
+      ok: result.ok,
+      data: result.data,
+      cooldownSeconds: result.cooldownSeconds,
+    }, null, 2));
+    return result;
+  }
+
+  async function sendCustomRequest() {
+    const prepared = buildCustomRequestFromState();
+    if (!prepared) {
       return;
     }
 
     setCustomSending(true);
     try {
-      const response = await fetch(finalUrl, requestInit);
-      const json = await response.json().catch(() => ({}));
-      setCustomResponse(JSON.stringify({
-        status: response.status,
-        ok: response.ok,
-        data: json,
-      }, null, 2));
+      const result = await executeCustomRequest(prepared);
 
-      if (!response.ok) {
+      if (!result.ok) {
         toast({
           variant: "destructive",
-          title: `Request failed (${response.status})`,
+          title: `Request failed (${result.status})`,
         });
       } else {
         toast({
-          title: `Request sent (${response.status})`,
+          title: `Request sent (${result.status})`,
         });
       }
     } catch (error) {
@@ -493,6 +558,79 @@ function ControllerPage() {
     } finally {
       setCustomSending(false);
     }
+  }
+
+  async function sleepWithStop(seconds: number) {
+    const delay = Math.max(0, Math.floor(seconds * 1000));
+    const start = Date.now();
+    while (!customLoopStopRef.current && Date.now() - start < delay) {
+      const remaining = delay - (Date.now() - start);
+      await new Promise((resolve) => window.setTimeout(resolve, Math.min(250, remaining)));
+    }
+  }
+
+  async function startCustomLoop() {
+    if (customLoopRunning || customSending) {
+      return;
+    }
+    const prepared = buildCustomRequestFromState();
+    if (!prepared) {
+      return;
+    }
+
+    customLoopStopRef.current = false;
+    setCustomLoopStopping(false);
+    setCustomLoopRunning(true);
+    setCustomModalOpen(false);
+
+    toast({
+      title: 'Loop started',
+    });
+
+    try {
+      while (!customLoopStopRef.current) {
+        const abortController = new AbortController();
+        customLoopAbortRef.current = abortController;
+        const result = await executeCustomRequest(prepared, abortController.signal);
+
+        if (!result.ok) {
+          toast({
+            variant: "destructive",
+            title: `Loop stopped on error (${result.status})`,
+          });
+          break;
+        }
+
+        await sleepWithStop(result.cooldownSeconds);
+      }
+    } catch (error) {
+      if ((error as Error).name !== 'AbortError') {
+        setCustomResponse(JSON.stringify({
+          error: (error as Error).message,
+        }, null, 2));
+        toast({
+          variant: "destructive",
+          title: "Loop failed",
+        });
+      }
+    } finally {
+      customLoopAbortRef.current = null;
+      customLoopStopRef.current = false;
+      setCustomLoopRunning(false);
+      setCustomLoopStopping(false);
+      toast({
+        title: 'Loop stopped',
+      });
+    }
+  }
+
+  function stopCustomLoop() {
+    if (!customLoopRunning || customLoopStopRef.current) {
+      return;
+    }
+    customLoopStopRef.current = true;
+    setCustomLoopStopping(true);
+    customLoopAbortRef.current?.abort();
   }
 
   function applyRoutePreset(presetKey: string) {
@@ -529,6 +667,8 @@ function ControllerPage() {
   useEffect(() => {
     return () => {
       dragCleanupRef.current?.();
+      customLoopStopRef.current = true;
+      customLoopAbortRef.current?.abort();
     };
   }, []);
 
@@ -623,6 +763,9 @@ function ControllerPage() {
                 applyRoutePreset(customRoutePreset);
                 setCustomModalOpen(true);
               }}
+              customLoopRunning={customLoopRunning}
+              customLoopStopping={customLoopStopping}
+              onStopCustomLoop={stopCustomLoop}
             />
           )}
           {loadingEvent && (
@@ -708,9 +851,13 @@ function ControllerPage() {
           </div>
 
           <DialogFooter>
-            <Button type="button" onClick={sendCustomRequest} disabled={customSending}>
+            <Button type="button" onClick={sendCustomRequest} disabled={customSending || customLoopRunning}>
               {!customSending && 'Send'}
               {customSending && <Spinner/>}
+            </Button>
+            <Button type="button" onClick={startCustomLoop} disabled={customSending || customLoopRunning}>
+              {!customLoopRunning && 'Loop'}
+              {customLoopRunning && <Spinner/>}
             </Button>
           </DialogFooter>
         </DialogContent>

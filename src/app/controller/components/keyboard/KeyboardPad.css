@@ -54,6 +54,34 @@
     background: #ffcb46;
 }
 
+.keyboard-key.key-custom-loop {
+    background: #f97316;
+    color: #fff7ed;
+    border-color: #fdba74;
+}
+
+.keyboard-loop-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+}
+
+.keyboard-loop-loader {
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 999px;
+    border: 2px solid rgba(255, 247, 237, 0.35);
+    border-top-color: #fff7ed;
+    animation: keyboard-loop-spin 0.9s linear infinite;
+}
+
+.keyboard-loop-loader.is-stopping {
+    animation-play-state: paused;
+    border-top-color: #fff7ed;
+    opacity: 0.6;
+}
+
 @keyframes keyboard-pulse {
     0% {
         transform: scale(1);
@@ -66,5 +94,11 @@
     100% {
         transform: scale(1);
         box-shadow: 0 0 0 0 rgba(85, 216, 255, 0);
+    }
+}
+
+@keyframes keyboard-loop-spin {
+    to {
+        transform: rotate(360deg);
     }
 }

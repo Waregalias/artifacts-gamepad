@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="add draggable controls, implement virtual key triggers, and introduce custom API request modal">
+    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="update deploy workflow trigger to use tags instead of branches">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/controller/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controller/page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -219,7 +218,9 @@
       <workItem from="1775635871491" duration="1533000" />
       <workItem from="1775839330659" duration="11070000" />
       <workItem from="1775906127574" duration="2578000" />
-      <workItem from="1775933639522" duration="2274000" />
+      <workItem from="1775933639522" duration="6564000" />
+      <workItem from="1776066431633" duration="40000" />
+      <workItem from="1776082839549" duration="23000" />
     </task>
     <task id="LOCAL-00001" summary="init nextjs project">
       <option name="closed" value="true" />
@@ -493,7 +494,23 @@
       <option name="project" value="LOCAL" />
       <updated>1775910245095</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="extend custom API request functionality with route presets, query/body templates, and improved input handling">
+      <option name="closed" value="true" />
+      <created>1775936470756</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1775936470756</updated>
+    </task>
+    <task id="LOCAL-00036" summary="update deploy workflow trigger to use tags instead of branches">
+      <option name="closed" value="true" />
+      <created>1776010062293</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1776010062293</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -523,8 +540,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="wip: update ui with v0" />
-    <MESSAGE value="wip: clean code + add zustand" />
     <MESSAGE value="wip: try debounce gamepad event" />
     <MESSAGE value="done: save action with delay" />
     <MESSAGE value="done: load character by token, save both on submit" />
@@ -548,7 +563,9 @@
     <MESSAGE value="enable Pages setup in GitHub Actions deploy workflow" />
     <MESSAGE value="update basePath and assetPrefix for GitHub Pages, adjust repo URLs, and improve workflow configuration" />
     <MESSAGE value="add draggable controls, implement virtual key triggers, and introduce custom API request modal" />
-    <option name="LAST_COMMIT_MESSAGE" value="add draggable controls, implement virtual key triggers, and introduce custom API request modal" />
+    <MESSAGE value="extend custom API request functionality with route presets, query/body templates, and improved input handling" />
+    <MESSAGE value="update deploy workflow trigger to use tags instead of branches" />
+    <option name="LAST_COMMIT_MESSAGE" value="update deploy workflow trigger to use tags instead of branches" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
