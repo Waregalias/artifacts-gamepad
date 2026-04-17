@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="update deploy workflow trigger to use tags instead of branches">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="add support for custom request loop, enhance keyboard actions, and fix long-running loop stopping logic">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-pages.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-pages.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -221,6 +221,7 @@
       <workItem from="1775933639522" duration="6564000" />
       <workItem from="1776066431633" duration="40000" />
       <workItem from="1776082839549" duration="23000" />
+      <workItem from="1776437267826" duration="4107000" />
     </task>
     <task id="LOCAL-00001" summary="init nextjs project">
       <option name="closed" value="true" />
@@ -510,7 +511,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776010062293</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="add support for custom request loop, enhance keyboard actions, and fix long-running loop stopping logic">
+      <option name="closed" value="true" />
+      <created>1776462125574</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1776462125574</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -540,7 +549,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="wip: try debounce gamepad event" />
     <MESSAGE value="done: save action with delay" />
     <MESSAGE value="done: load character by token, save both on submit" />
     <MESSAGE value="done: optimize setting form rendering" />
@@ -565,7 +573,8 @@
     <MESSAGE value="add draggable controls, implement virtual key triggers, and introduce custom API request modal" />
     <MESSAGE value="extend custom API request functionality with route presets, query/body templates, and improved input handling" />
     <MESSAGE value="update deploy workflow trigger to use tags instead of branches" />
-    <option name="LAST_COMMIT_MESSAGE" value="update deploy workflow trigger to use tags instead of branches" />
+    <MESSAGE value="add support for custom request loop, enhance keyboard actions, and fix long-running loop stopping logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="add support for custom request loop, enhance keyboard actions, and fix long-running loop stopping logic" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
