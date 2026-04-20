@@ -2,52 +2,22 @@
 
 import * as React from "react";
 import {useCallback, useEffect, useRef, useState} from "react";
-import {ControlMode, useStore} from "@/app/store";
+import {useStore} from "@/app/store";
 import {ArtifactCharacter} from "@/app/controller/models/artifact.model";
 import {getCharacter} from "@/app/controller/services/api.service";
 import {toast} from "@/components/ui/use-toast";
 import {Button} from "@/components/ui/button";
-import {Spinner} from "@/components/ui/kibo-ui/spinner";
 import {actionManager} from "@/app/controller/components/actions/ActionManager";
-import dynamic from "next/dynamic";
-import SettingsForm from "@/app/components/SettingsForm";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
-import {Input} from "@/components/ui/input";
-import {Textarea} from "@/components/ui/textarea";
+import ControllerSidebar from "@/app/controller/components/sidebar/ControllerSidebar";
+import FloatingControlsPanel from "@/app/controller/components/controls/FloatingControlsPanel";
+import CustomRequestModal from "@/app/controller/components/custom/CustomRequestModal";
+import {
+  availableCustomRoutes,
+  HttpMethod,
+  routeBodyTemplates,
+  routeQueryTemplates
+} from "@/app/controller/constants/custom-routes";
 import './style.css';
-
-const Gamepad = dynamic(() => import("@/app/controller/components/gamepad/Gamepad"), {
-  ssr: false,
-});
-
-const KeyboardPad = dynamic(() => import("@/app/controller/components/keyboard/KeyboardPad"), {
-  ssr: false,
-});
-
-const gamepadLegend = [
-  {control: "D-Pad Up", action: "Move north (Y - 1)."},
-  {control: "D-Pad Down", action: "Move south (Y + 1)."},
-  {control: "D-Pad Left", action: "Move west (X - 1)."},
-  {control: "D-Pad Right", action: "Move east (X + 1)."},
-  {control: "Y / Triangle", action: "Rest action (`rest`)."},
-  {control: "B / Circle", action: "Fight action (`fight`)."},
-  {control: "X / Square", action: "Gather action (`gathering`)."},
-  {control: "A / Cross", action: "Transition action (`transition`)."},
-  {control: "L1, R1, L2, R2", action: "Currently not bound to an API action."},
-  {control: "Start / Select", action: "Currently not bound to an API action."},
-];
-
-const keyboardLegend = [
-  {control: "Arrow Up", action: "Move north (Y - 1)."},
-  {control: "Arrow Down", action: "Move south (Y + 1)."},
-  {control: "Arrow Left", action: "Move west (X - 1)."},
-  {control: "Arrow Right", action: "Move east (X + 1)."},
-  {control: "E", action: "Rest action (`rest`)."},
-  {control: "Space", action: "Fight action (`fight`)."},
-  {control: "Q", action: "Gather action (`gathering`)."},
-  {control: "T", action: "Transition action (`transition`)."},
-];
 
 const keyboardBindings: Record<string, string> = {
   ArrowUp: 'directionUp',
@@ -60,14 +30,6 @@ const keyboardBindings: Record<string, string> = {
   KeyT: 'buttonDown',
 };
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-
-type CustomRoutePreset = {
-  key: string;
-  method: HttpMethod;
-  apiPath: string;
-};
-
 type PreparedCustomRequest = {
   finalUrl: string;
   requestInit: RequestInit;
@@ -78,87 +40,6 @@ type CustomRequestResult = {
   ok: boolean;
   data: unknown;
   cooldownSeconds: number;
-};
-
-const availableCustomRoutes: CustomRoutePreset[] = [
-  {key: 'GET /my/characters', method: 'GET', apiPath: '/my/characters'},
-  {key: 'GET /my/details', method: 'GET', apiPath: '/my/details'},
-  {key: 'GET /my/bank', method: 'GET', apiPath: '/my/bank'},
-  {key: 'GET /my/bank/items', method: 'GET', apiPath: '/my/bank/items'},
-  {key: 'GET /my/grandexchange/orders', method: 'GET', apiPath: '/my/grandexchange/orders'},
-  {key: 'GET /my/grandexchange/history', method: 'GET', apiPath: '/my/grandexchange/history'},
-  {key: 'GET /my/pending-items', method: 'GET', apiPath: '/my/pending-items'},
-  {key: 'GET /my/logs', method: 'GET', apiPath: '/my/logs'},
-  {key: 'GET /my/logs/{name}', method: 'GET', apiPath: '/my/logs/{name}'},
-  {key: 'POST /my/change_password', method: 'POST', apiPath: '/my/change_password'},
-  {key: 'POST /my/{name}/action/bank/buy_expansion', method: 'POST', apiPath: '/my/{name}/action/bank/buy_expansion'},
-  {key: 'POST /my/{name}/action/bank/deposit/gold', method: 'POST', apiPath: '/my/{name}/action/bank/deposit/gold'},
-  {key: 'POST /my/{name}/action/bank/deposit/item', method: 'POST', apiPath: '/my/{name}/action/bank/deposit/item'},
-  {key: 'POST /my/{name}/action/bank/withdraw/gold', method: 'POST', apiPath: '/my/{name}/action/bank/withdraw/gold'},
-  {key: 'POST /my/{name}/action/bank/withdraw/item', method: 'POST', apiPath: '/my/{name}/action/bank/withdraw/item'},
-  {key: 'POST /my/{name}/action/change_skin', method: 'POST', apiPath: '/my/{name}/action/change_skin'},
-  {key: 'POST /my/{name}/action/claim_item/{id}', method: 'POST', apiPath: '/my/{name}/action/claim_item/{id}'},
-  {key: 'POST /my/{name}/action/crafting', method: 'POST', apiPath: '/my/{name}/action/crafting'},
-  {key: 'POST /my/{name}/action/delete', method: 'POST', apiPath: '/my/{name}/action/delete'},
-  {key: 'POST /my/{name}/action/equip', method: 'POST', apiPath: '/my/{name}/action/equip'},
-  {key: 'POST /my/{name}/action/fight', method: 'POST', apiPath: '/my/{name}/action/fight'},
-  {key: 'POST /my/{name}/action/gathering', method: 'POST', apiPath: '/my/{name}/action/gathering'},
-  {key: 'POST /my/{name}/action/give/gold', method: 'POST', apiPath: '/my/{name}/action/give/gold'},
-  {key: 'POST /my/{name}/action/give/item', method: 'POST', apiPath: '/my/{name}/action/give/item'},
-  {key: 'POST /my/{name}/action/grandexchange/buy', method: 'POST', apiPath: '/my/{name}/action/grandexchange/buy'},
-  {key: 'POST /my/{name}/action/grandexchange/cancel', method: 'POST', apiPath: '/my/{name}/action/grandexchange/cancel'},
-  {key: 'POST /my/{name}/action/grandexchange/create-buy-order', method: 'POST', apiPath: '/my/{name}/action/grandexchange/create-buy-order'},
-  {key: 'POST /my/{name}/action/grandexchange/create-sell-order', method: 'POST', apiPath: '/my/{name}/action/grandexchange/create-sell-order'},
-  {key: 'POST /my/{name}/action/grandexchange/fill', method: 'POST', apiPath: '/my/{name}/action/grandexchange/fill'},
-  {key: 'POST /my/{name}/action/move', method: 'POST', apiPath: '/my/{name}/action/move'},
-  {key: 'POST /my/{name}/action/npc/buy', method: 'POST', apiPath: '/my/{name}/action/npc/buy'},
-  {key: 'POST /my/{name}/action/npc/sell', method: 'POST', apiPath: '/my/{name}/action/npc/sell'},
-  {key: 'POST /my/{name}/action/recycling', method: 'POST', apiPath: '/my/{name}/action/recycling'},
-  {key: 'POST /my/{name}/action/rest', method: 'POST', apiPath: '/my/{name}/action/rest'},
-  {key: 'POST /my/{name}/action/task/cancel', method: 'POST', apiPath: '/my/{name}/action/task/cancel'},
-  {key: 'POST /my/{name}/action/task/complete', method: 'POST', apiPath: '/my/{name}/action/task/complete'},
-  {key: 'POST /my/{name}/action/task/exchange', method: 'POST', apiPath: '/my/{name}/action/task/exchange'},
-  {key: 'POST /my/{name}/action/task/new', method: 'POST', apiPath: '/my/{name}/action/task/new'},
-  {key: 'POST /my/{name}/action/task/trade', method: 'POST', apiPath: '/my/{name}/action/task/trade'},
-  {key: 'POST /my/{name}/action/transition', method: 'POST', apiPath: '/my/{name}/action/transition'},
-  {key: 'POST /my/{name}/action/unequip', method: 'POST', apiPath: '/my/{name}/action/unequip'},
-  {key: 'POST /my/{name}/action/use', method: 'POST', apiPath: '/my/{name}/action/use'},
-];
-
-const routeQueryTemplates: Record<string, string> = {
-  '/my/bank/items': 'item_code=wooden_sword&page=1&size=20',
-  '/my/grandexchange/orders': 'code=wooden_sword&type=buy&page=1&size=20',
-  '/my/grandexchange/history': 'id=order_id&code=wooden_sword&page=1&size=20',
-  '/my/pending-items': 'page=1&size=20',
-  '/my/logs': 'page=1&size=20',
-  '/my/logs/{name}': 'page=1&size=20',
-};
-
-const routeBodyTemplates: Record<string, string> = {
-  '/my/change_password': JSON.stringify({current_password: 'current_password', new_password: 'new_password'}, null, 2),
-  '/my/{name}/action/move': JSON.stringify({x: 1, y: 1}, null, 2),
-  '/my/{name}/action/equip': JSON.stringify({code: 'wooden_sword', slot: 'weapon_slot', quantity: 1}, null, 2),
-  '/my/{name}/action/unequip': JSON.stringify({slot: 'weapon_slot', quantity: 1}, null, 2),
-  '/my/{name}/action/use': JSON.stringify({code: 'small_health_potion', quantity: 1}, null, 2),
-  '/my/{name}/action/fight': JSON.stringify({participants: []}, null, 2),
-  '/my/{name}/action/crafting': JSON.stringify({code: 'copper_bar', quantity: 1}, null, 2),
-  '/my/{name}/action/bank/deposit/gold': JSON.stringify({quantity: 100}, null, 2),
-  '/my/{name}/action/bank/deposit/item': JSON.stringify({code: 'copper_ore', quantity: 1}, null, 2),
-  '/my/{name}/action/bank/withdraw/item': JSON.stringify({code: 'copper_ore', quantity: 1}, null, 2),
-  '/my/{name}/action/bank/withdraw/gold': JSON.stringify({quantity: 100}, null, 2),
-  '/my/{name}/action/npc/buy': JSON.stringify({code: 'small_health_potion', quantity: 1}, null, 2),
-  '/my/{name}/action/npc/sell': JSON.stringify({code: 'small_health_potion', quantity: 1}, null, 2),
-  '/my/{name}/action/recycling': JSON.stringify({code: 'copper_sword', quantity: 1}, null, 2),
-  '/my/{name}/action/grandexchange/buy': JSON.stringify({id: 'order_id', quantity: 1}, null, 2),
-  '/my/{name}/action/grandexchange/create-sell-order': JSON.stringify({code: 'copper_ore', quantity: 10, price: 5}, null, 2),
-  '/my/{name}/action/grandexchange/cancel': JSON.stringify({id: 'order_id'}, null, 2),
-  '/my/{name}/action/grandexchange/create-buy-order': JSON.stringify({code: 'copper_ore', quantity: 10, price: 5}, null, 2),
-  '/my/{name}/action/grandexchange/fill': JSON.stringify({id: 'order_id', quantity: 1}, null, 2),
-  '/my/{name}/action/task/trade': JSON.stringify({code: 'task_token', quantity: 1}, null, 2),
-  '/my/{name}/action/give/gold': JSON.stringify({character: 'target_character', quantity: 1}, null, 2),
-  '/my/{name}/action/give/item': JSON.stringify({character: 'target_character', items: [{code: 'copper_ore', quantity: 1}]}, null, 2),
-  '/my/{name}/action/delete': JSON.stringify({code: 'copper_ore', quantity: 1}, null, 2),
-  '/my/{name}/action/change_skin': JSON.stringify({skin: 'men1'}, null, 2),
 };
 
 function ControllerPage() {
@@ -700,168 +581,55 @@ function ControllerPage() {
           </Button>
         </div>
 
-        <aside className={`controller-float-panel ${leftMenuOpen ? 'is-open' : 'is-closed'}`}>
-          <header className="controller-header">
-            <p className="controller-subtitle">Artifacts MMO</p>
-            <h1>Gamepad Hub</h1>
-          </header>
+        <ControllerSidebar
+          leftMenuOpen={leftMenuOpen}
+          controlMode={controlMode}
+          onControlModeChange={setControlMode}
+        />
 
-          <div className="controller-input-mode">
-            <h2>Input Mode</h2>
-            <Select value={controlMode} onValueChange={(value) => setControlMode(value as ControlMode)}>
-              <SelectTrigger className="controller-mode-select">
-                <SelectValue/>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="gamepad">Gamepad</SelectItem>
-                <SelectItem value="keyboard">Keyboard / Mouse</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="controller-legend">
-            <h2>Controls Legend</h2>
-            <p>{controlMode === 'gamepad' ? 'Gamepad mapping' : 'Keyboard mapping'}</p>
-            <div className="controller-legend-scroll">
-              {(controlMode === 'gamepad' ? gamepadLegend : keyboardLegend).map((item) => (
-                <article key={item.control} className="legend-item">
-                  <h3>{item.control}</h3>
-                  <p>{item.action}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <SettingsForm/>
-        </aside>
-
-        <div
-          ref={controlsRef}
-          className="controller-float-controls"
-          style={controlsReady ? {left: `${controlsPosition.x}px`, top: `${controlsPosition.y}px`} : undefined}
-        >
-          <div className="controller-controls-drag" onPointerDown={startControlsDrag}>
-            Drag controls
-          </div>
-          <div className="controller-status">
-            <span>Position: x-{currentCharacter?.x ?? '-'} ; y-{currentCharacter?.y ?? '-'}</span>
-            <Button type={"button"} onClick={refreshCharacter}>
-              {!loadingRefresh && (<span>Refresh</span>)}
-              {loadingRefresh && (<Spinner/>)}
-            </Button>
-          </div>
-          {controlMode === 'gamepad' && (
-            <Gamepad gamePadEvent={handleGamePadEvent}/>
-          )}
-          {controlMode === 'keyboard' && (
-            <KeyboardPad
-              pressedKeys={pressedKeys}
-              pulseCode={lastPressedKey}
-              pulseTick={lastPressedTick}
-              onVirtualKeyPress={triggerVirtualKey}
-              onOpenCustomModal={() => {
-                applyRoutePreset(customRoutePreset);
-                setCustomModalOpen(true);
-              }}
-              customLoopRunning={customLoopRunning}
-              customLoopStopping={customLoopStopping}
-              onStopCustomLoop={stopCustomLoop}
-            />
-          )}
-          {loadingEvent && (
-            <div className="controller-action-spinner">
-              <Spinner/>
-            </div>
-          )}
-        </div>
+        <FloatingControlsPanel
+          controlsRef={controlsRef}
+          controlsReady={controlsReady}
+          controlsPosition={controlsPosition}
+          onStartDrag={startControlsDrag}
+          currentCharacter={currentCharacter}
+          onRefreshCharacter={refreshCharacter}
+          loadingRefresh={loadingRefresh}
+          controlMode={controlMode}
+          onGamePadEvent={handleGamePadEvent}
+          pressedKeys={pressedKeys}
+          lastPressedKey={lastPressedKey}
+          lastPressedTick={lastPressedTick}
+          onVirtualKeyPress={triggerVirtualKey}
+          onOpenCustomModal={() => {
+            applyRoutePreset(customRoutePreset);
+            setCustomModalOpen(true);
+          }}
+          customLoopRunning={customLoopRunning}
+          customLoopStopping={customLoopStopping}
+          onStopCustomLoop={stopCustomLoop}
+          loadingEvent={loadingEvent}
+        />
       </div>
 
-      <Dialog open={customModalOpen} onOpenChange={setCustomModalOpen}>
-        <DialogContent className="controller-custom-modal">
-          <DialogHeader>
-            <DialogTitle>Custom API Request</DialogTitle>
-            <DialogDescription>
-              Character base: `https://api.artifactsmmo.com/my/{currentCharacter?.name || 'CHARACTER_NAME'}` (you can also use full `/my/...` routes).
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="controller-custom-grid">
-            <div>
-              <label className="controller-custom-label">Route Presets</label>
-              <Select value={customRoutePreset} onValueChange={applyRoutePreset}>
-                <SelectTrigger>
-                  <SelectValue/>
-                </SelectTrigger>
-                <SelectContent>
-                  {availableCustomRoutes.map((item) => (
-                    <SelectItem key={item.key} value={item.key}>
-                      {item.key}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="controller-custom-label">Method</label>
-              <Select value={customMethod} onValueChange={(value) => setCustomMethod(value as HttpMethod)}>
-                <SelectTrigger>
-                  <SelectValue/>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="GET">GET</SelectItem>
-                  <SelectItem value="POST">POST</SelectItem>
-                  <SelectItem value="PUT">PUT</SelectItem>
-                  <SelectItem value="DELETE">DELETE</SelectItem>
-                  <SelectItem value="PATCH">PATCH</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="controller-custom-label">Route</label>
-              <Input
-                value={customRoute}
-                onChange={(event) => setCustomRoute(event.target.value)}
-                placeholder="/action/unequip or /my/bank/items?page=1&size=20"
-              />
-            </div>
-
-            <div>
-              <label className="controller-custom-label">{customMethod === 'GET' || customMethod === 'DELETE' ? 'Params (JSON)' : 'Body (JSON)'}</label>
-              <Textarea
-                value={customPayload}
-                onChange={(event) => setCustomPayload(event.target.value)}
-                placeholder={customMethod === 'GET' || customMethod === 'DELETE'
-                  ? '{"slot":"weapon_slot"}'
-                  : '{"slot":"weapon_slot"}'}
-                className="controller-custom-textarea"
-              />
-            </div>
-
-            <div>
-              <label className="controller-custom-label">Response</label>
-              <Textarea
-                value={customResponse}
-                readOnly
-                className="controller-custom-textarea controller-custom-response"
-                placeholder="Response will appear here"
-              />
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button type="button" onClick={sendCustomRequest} disabled={customSending || customLoopRunning}>
-              {!customSending && 'Send'}
-              {customSending && <Spinner/>}
-            </Button>
-            <Button type="button" onClick={startCustomLoop} disabled={customSending || customLoopRunning}>
-              {!customLoopRunning && 'Loop'}
-              {customLoopRunning && <Spinner/>}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <CustomRequestModal
+        open={customModalOpen}
+        onOpenChange={setCustomModalOpen}
+        characterName={currentCharacter?.name}
+        customRoutePreset={customRoutePreset}
+        onRoutePresetChange={applyRoutePreset}
+        customMethod={customMethod}
+        onMethodChange={setCustomMethod}
+        customRoute={customRoute}
+        onRouteChange={setCustomRoute}
+        customPayload={customPayload}
+        onPayloadChange={setCustomPayload}
+        customResponse={customResponse}
+        customSending={customSending}
+        customLoopRunning={customLoopRunning}
+        onSend={sendCustomRequest}
+        onLoop={startCustomLoop}
+      />
     </section>
   )
 }
