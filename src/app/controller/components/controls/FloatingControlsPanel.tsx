@@ -16,7 +16,7 @@ const KeyboardPad = dynamic(() => import("@/app/controller/components/keyboard/K
 });
 
 type FloatingControlsPanelProps = {
-  controlsRef: React.RefObject<HTMLDivElement | null>;
+  controlsRef: React.Ref<HTMLDivElement>;
   controlsReady: boolean;
   controlsPosition: {x: number; y: number};
   onStartDrag: (event: React.PointerEvent<HTMLDivElement>) => void;

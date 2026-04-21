@@ -17,7 +17,8 @@
     "start:desktop": "electron .",
     "lint": "next lint",
     "electron": "electron .",
-    "package": "npm run build:desktop"
+    "package": "npm run build:desktop",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
