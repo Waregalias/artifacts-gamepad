@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="bump version to 1.1.0 for initial stable release">
+    <list default="true" id="daf52e2f-621c-4672-b51b-440f8c2cc92d" name="Changes" comment="bump version to 1.1.1 for security stable release">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
@@ -35,6 +35,7 @@
   <component name="CopilotPersistence">
     <persistenceIdMap>
       <entry key="_/Volumes/macOS/Tech/React/artifacts-gamepad-controller" value="2nml4Kuzx68FSoiEdrnKurU3XIz" />
+      <entry key="_/Volumes/macOS/Tech/artifacts-gamepad-controller" value="3F1ryzldPvWD8WepWEW0Qh6zOMF" />
     </persistenceIdMap>
   </component>
   <component name="EmbeddingIndexingInfo">
@@ -104,7 +105,7 @@
     "js.debugger.nextJs.config.created.client": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Volumes/macOS/Tech/React/artifacts-gamepad-controller",
+    "last_opened_file_path": "/Volumes/macOS/Tech/artifacts-gamepad-controller",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -262,7 +263,10 @@
       <workItem from="1776756018824" duration="7001000" />
       <workItem from="1776807561820" duration="1318000" />
       <workItem from="1776865548367" duration="4000" />
-      <workItem from="1779294267000" duration="1124000" />
+      <workItem from="1779294267000" duration="2582000" />
+      <workItem from="1779434609449" duration="607000" />
+      <workItem from="1780048619689" duration="91000" />
+      <workItem from="1781253675309" duration="809000" />
     </task>
     <task id="LOCAL-00001" summary="init nextjs project">
       <option name="closed" value="true" />
@@ -600,7 +604,23 @@
       <option name="project" value="LOCAL" />
       <updated>1776790264383</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="update dependencies and package-lock file to latest versions">
+      <option name="closed" value="true" />
+      <created>1779297018486</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1779297018486</updated>
+    </task>
+    <task id="LOCAL-00044" summary="bump version to 1.1.1 for security stable release">
+      <option name="closed" value="true" />
+      <created>1779298143226</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1779298143226</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -617,7 +637,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/dependabot/npm_and_yarn/npm_and_yarn-0a68a62365" />
+                        <option value="main" />
                       </list>
                     </value>
                   </entry>
@@ -630,8 +650,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="done: sending move action to artifact client&#10;next: loader on controller and refresh during update" />
-    <MESSAGE value="wip: move actions to manager before include skills btn" />
     <MESSAGE value="update doc for electron" />
     <MESSAGE value="add rest and fight actions" />
     <MESSAGE value="add electron controller window with support for development and production" />
@@ -655,7 +673,9 @@
     <MESSAGE value="extract controls legends and custom API routes to dedicated constants, simplify ControllerPage structure through component modularization" />
     <MESSAGE value="remove unused constants, simplify use-toast types, add lint script, and update dependencies and workspace settings" />
     <MESSAGE value="bump version to 1.1.0 for initial stable release" />
-    <option name="LAST_COMMIT_MESSAGE" value="bump version to 1.1.0 for initial stable release" />
+    <MESSAGE value="update dependencies and package-lock file to latest versions" />
+    <MESSAGE value="bump version to 1.1.1 for security stable release" />
+    <option name="LAST_COMMIT_MESSAGE" value="bump version to 1.1.1 for security stable release" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
