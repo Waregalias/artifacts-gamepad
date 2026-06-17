@@ -93,6 +93,7 @@
       "output": "release"
     },
     "mac": {
+      "icon": "electron/assets/macos/icon.icns",
       "target": [
         "dmg",
         "zip"
@@ -100,9 +101,17 @@
       "category": "public.app-category.games"
     },
     "win": {
+      "icon": "electron/assets/windows/icon.ico",
       "target": [
         "nsis",
         "zip"
+      ]
+    },
+    "linux": {
+      "icon": "electron/assets/linux/icons",
+      "target": [
+        "AppImage",
+        "deb"
       ]
     },
     "nsis": {
