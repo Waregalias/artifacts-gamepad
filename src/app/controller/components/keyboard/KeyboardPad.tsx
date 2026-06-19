@@ -1,5 +1,6 @@
 'use client'
 
+import {Code2} from "lucide-react";
 import './KeyboardPad.css';
 
 interface KeyboardPadProps {
@@ -11,6 +12,7 @@ interface KeyboardPadProps {
   customLoopRunning: boolean;
   customLoopStopping: boolean;
   onStopCustomLoop: () => void;
+  onOpenEditorModal: () => void;
 }
 
 const keyLabels: {label: string; code: string}[] = [
@@ -22,6 +24,7 @@ const keyLabels: {label: string; code: string}[] = [
   {label: '→', code: 'ArrowRight'},
   {label: 'E', code: 'KeyE'},
   {label: 'Space', code: 'Space'},
+  {label: 'Editor', code: 'EditorAction'},
   {label: 'Custom', code: 'CustomAction'},
 ];
 
@@ -34,6 +37,7 @@ function KeyboardPad({
   customLoopRunning,
   customLoopStopping,
   onStopCustomLoop,
+  onOpenEditorModal,
 }: KeyboardPadProps) {
   return (
     <div className="keyboard-wrap">
@@ -43,13 +47,18 @@ function KeyboardPad({
             const isPressed = pressedKeys.includes(item.code);
             const isPulse = pulseCode === item.code;
             const isCustom = item.code === 'CustomAction';
+            const isEditor = item.code === 'EditorAction';
             const isLoopButton = isCustom && customLoopRunning;
             return (
               <button
                 type="button"
                 key={isPulse ? `${item.code}-${pulseTick}` : item.code}
-                className={`keyboard-key ${isPressed ? 'is-pressed' : ''} ${isPulse ? 'is-pulse' : ''} ${item.code === 'Space' ? 'key-space' : ''} ${isCustom ? 'key-custom' : ''} ${isLoopButton ? 'key-custom-loop' : ''}`}
+                className={`keyboard-key ${isPressed ? 'is-pressed' : ''} ${isPulse ? 'is-pulse' : ''} ${item.code === 'Space' ? 'key-space' : ''} ${isCustom ? 'key-custom' : ''} ${isEditor ? 'key-editor' : ''} ${isLoopButton ? 'key-custom-loop' : ''}`}
                 onClick={() => {
+                  if (isEditor) {
+                    onOpenEditorModal();
+                    return;
+                  }
                   if (isCustom) {
                     if (customLoopRunning) {
                       onStopCustomLoop();
@@ -68,7 +77,14 @@ function KeyboardPad({
                       <span>{customLoopStopping ? 'Stopping...' : 'Stop'}</span>
                     </span>
                   )
-                  : item.label}
+                  : isEditor
+                    ? (
+                      <span className="keyboard-loop-content">
+                        <Code2 size={15} />
+                        <span>Editor</span>
+                      </span>
+                    )
+                    : item.label}
               </button>
             );
           })}

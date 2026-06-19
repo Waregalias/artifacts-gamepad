@@ -41,7 +41,7 @@
 }
 
 .keyboard-key.key-space {
-    grid-column: span 2;
+    grid-column: span 1;
 }
 
 .keyboard-key.key-custom {
@@ -52,6 +52,16 @@
 
 .keyboard-key.key-custom:hover {
     background: #ffcb46;
+}
+
+.keyboard-key.key-editor {
+    background: #2563eb;
+    color: #eff6ff;
+    border-color: #60a5fa;
+}
+
+.keyboard-key.key-editor:hover {
+    background: #3b82f6;
 }
 
 .keyboard-key.key-custom-loop {

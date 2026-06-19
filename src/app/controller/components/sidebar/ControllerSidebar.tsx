@@ -1,4 +1,4 @@
-import {ControlMode} from "@/app/store";
+import {ControlMode} from "@/store";
 import SettingsForm from "@/app/components/SettingsForm";
 import ControlsLegend from "@/app/controller/components/legend/ControlsLegend";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
@@ -7,9 +7,10 @@ type ControllerSidebarProps = {
   leftMenuOpen: boolean;
   controlMode: ControlMode;
   onControlModeChange: (mode: ControlMode) => void;
+  onCharacterSaved?: () => void;
 };
 
-function ControllerSidebar({leftMenuOpen, controlMode, onControlModeChange}: ControllerSidebarProps) {
+function ControllerSidebar({leftMenuOpen, controlMode, onControlModeChange, onCharacterSaved}: ControllerSidebarProps) {
   return (
     <aside className={`controller-float-panel ${leftMenuOpen ? 'is-open' : 'is-closed'}`}>
       <header className="controller-header">
@@ -32,7 +33,7 @@ function ControllerSidebar({leftMenuOpen, controlMode, onControlModeChange}: Con
 
       <ControlsLegend controlMode={controlMode}/>
 
-      <SettingsForm/>
+      <SettingsForm onSaved={onCharacterSaved}/>
     </aside>
   );
 }

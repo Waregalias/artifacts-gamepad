@@ -2,8 +2,9 @@
 
 import dynamic from "next/dynamic";
 import type * as React from "react";
-import {ControlMode} from "@/app/store";
+import {ControlMode} from "@/store";
 import {ArtifactCharacter} from "@/app/controller/models/artifact.model";
+import {Move} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Spinner} from "@/components/ui/kibo-ui/spinner";
 
@@ -33,6 +34,7 @@ type FloatingControlsPanelProps = {
   customLoopRunning: boolean;
   customLoopStopping: boolean;
   onStopCustomLoop: () => void;
+  onOpenEditorModal: () => void;
   loadingEvent: boolean;
 };
 
@@ -54,6 +56,7 @@ function FloatingControlsPanel({
   customLoopRunning,
   customLoopStopping,
   onStopCustomLoop,
+  onOpenEditorModal,
   loadingEvent,
 }: FloatingControlsPanelProps) {
   return (
@@ -62,8 +65,14 @@ function FloatingControlsPanel({
       className="controller-float-controls"
       style={controlsReady ? {left: `${controlsPosition.x}px`, top: `${controlsPosition.y}px`} : undefined}
     >
-      <div className="controller-controls-drag" onPointerDown={onStartDrag}>
-        Drag controls
+      <div
+        className="controller-controls-drag"
+        onPointerDown={onStartDrag}
+        role="button"
+        aria-label="Drag controls"
+        title="Drag controls"
+      >
+        <Move size={16} aria-hidden="true" />
       </div>
       <div className="controller-status">
         <span>Position: x-{currentCharacter?.x ?? '-'} ; y-{currentCharacter?.y ?? '-'}</span>
@@ -87,6 +96,7 @@ function FloatingControlsPanel({
           customLoopRunning={customLoopRunning}
           customLoopStopping={customLoopStopping}
           onStopCustomLoop={onStopCustomLoop}
+          onOpenEditorModal={onOpenEditorModal}
         />
       )}
 

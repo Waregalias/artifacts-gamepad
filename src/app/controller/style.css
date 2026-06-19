@@ -83,14 +83,16 @@
 
 .controller-controls-drag {
     align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(4, 26, 40, 0.94);
     border: 1px solid rgba(255, 255, 255, 0.25);
     color: #edfbff;
     border-radius: 999px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    padding: 0.3rem 0.65rem;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
     cursor: grab;
     user-select: none;
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useStore} from "@/app/store";
+import {useStore} from "@/store";
 import {ArtifactCharacter} from "@/app/controller/models/artifact.model";
 import {getCharacter} from "@/app/controller/services/api.service";
 import {toast} from "@/components/ui/use-toast";
@@ -11,6 +11,7 @@ import {actionManager} from "@/app/controller/components/actions/ActionManager";
 import ControllerSidebar from "@/app/controller/components/sidebar/ControllerSidebar";
 import FloatingControlsPanel from "@/app/controller/components/controls/FloatingControlsPanel";
 import CustomRequestModal from "@/app/controller/components/custom/CustomRequestModal";
+import CodeEditorModal from "@/app/controller/components/editor/CodeEditorModal";
 import {
   availableCustomRoutes,
   HttpMethod,
@@ -57,6 +58,7 @@ function ControllerPage() {
   const [loadingRefresh, setLoadingRefresh] = useState<boolean>(false)
   const [loadingEvent, setLoadingEvent] = useState<boolean>(false)
   const [customModalOpen, setCustomModalOpen] = useState(false);
+  const [editorModalOpen, setEditorModalOpen] = useState(false);
   const [customMethod, setCustomMethod] = useState<HttpMethod>('POST');
   const [customRoutePreset, setCustomRoutePreset] = useState('POST /my/{name}/action/unequip');
   const [customRoute, setCustomRoute] = useState('/action/unequip');
@@ -585,6 +587,7 @@ function ControllerPage() {
           leftMenuOpen={leftMenuOpen}
           controlMode={controlMode}
           onControlModeChange={setControlMode}
+          onCharacterSaved={() => setLeftMenuOpen(false)}
         />
 
         <FloatingControlsPanel
@@ -608,6 +611,7 @@ function ControllerPage() {
           customLoopRunning={customLoopRunning}
           customLoopStopping={customLoopStopping}
           onStopCustomLoop={stopCustomLoop}
+          onOpenEditorModal={() => setEditorModalOpen(true)}
           loadingEvent={loadingEvent}
         />
       </div>
@@ -630,6 +634,8 @@ function ControllerPage() {
         onSend={sendCustomRequest}
         onLoop={startCustomLoop}
       />
+
+      <CodeEditorModal open={editorModalOpen} onOpenChange={setEditorModalOpen} />
     </section>
   )
 }

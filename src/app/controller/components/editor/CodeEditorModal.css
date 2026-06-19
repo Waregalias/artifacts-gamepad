@@ -1,0 +1,62 @@
+.editor-modal {
+    max-width: min(96vw, 1100px);
+    width: 96vw;
+}
+
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.6rem;
+}
+
+.editor-script-select {
+    background: rgba(5, 20, 35, 0.9);
+    color: #e6f8ff;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 8px;
+    padding: 0.35rem 0.5rem;
+    min-width: 12rem;
+}
+
+.editor-toolbar-spacer {
+    flex: 1;
+}
+
+.editor-monaco {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 46vh;
+}
+
+.editor-console {
+    margin-top: 0.6rem;
+    height: 22vh;
+    overflow-y: auto;
+    background: #02131f;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    padding: 0.5rem 0.65rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem;
+    color: #cfeefb;
+}
+
+.editor-console-line {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.editor-console-line.is-error {
+    color: #ff8d8d;
+}
+
+.editor-console-line.is-result {
+    color: #9cffb0;
+}
+
+.editor-console-empty {
+    opacity: 0.5;
+}

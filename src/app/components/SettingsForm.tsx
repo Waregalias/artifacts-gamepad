@@ -6,7 +6,7 @@ import {Controller, useForm} from "react-hook-form";
 import Image from "next/image";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useStore} from "@/app/store";
+import {useStore} from "@/store";
 import {Button} from "@/components/ui/button";
 import {
   Form,
@@ -28,7 +28,7 @@ const FormSchema = z.object({
   name: z.string(),
 });
 
-function SettingsForm() {
+function SettingsForm({onSaved}: {onSaved?: () => void}) {
   const savedApiKey = useStore((state) => state.apiKey);
   const savedCharacter = useStore((state) => state.character);
   const saveSettings = useStore((state) => state.saveSettings);
@@ -65,6 +65,7 @@ function SettingsForm() {
     toast({
       title: "API key and character saved locally.",
     });
+    onSaved?.();
   }
 
   return (

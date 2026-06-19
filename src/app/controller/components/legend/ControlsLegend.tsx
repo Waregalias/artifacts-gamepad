@@ -1,4 +1,4 @@
-import {ControlMode} from "@/app/store";
+import {ControlMode} from "@/store";
 import {gamepadLegend, keyboardLegend} from "@/app/controller/constants/control-legends";
 
 type ControlsLegendProps = {
