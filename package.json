@@ -54,7 +54,6 @@
     "react-feather": "^2.0.10",
     "react-gamepads": "^1.0.0",
     "react-hook-form": "^7.53.1",
-    "react-toggle-dark-mode": "^1.1.1",
     "sonner": "^1.5.0",
     "vaul": "^1.1.2",
     "zod": "^3.23.8",
@@ -77,12 +76,13 @@
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5",
-    "vitest": "^2.1.9",
+    "vitest": "^4.1.9",
     "wait-on": "^8.0.3"
   },
   "overrides": {
     "postcss": "^8.5.10",
-    "tmp": "^0.2.6"
+    "tmp": "^0.2.6",
+    "dompurify": "^3.4.11"
   },
   "build": {
     "appId": "com.artifacts.gamepad",
