@@ -1,5 +1,5 @@
 import {ControlMode} from "@/store";
-import SettingsForm from "@/app/components/SettingsForm";
+import SettingsForm from "@/app/controller/components/settings/SettingsForm";
 import ControlsLegend from "@/app/controller/components/legend/ControlsLegend";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
