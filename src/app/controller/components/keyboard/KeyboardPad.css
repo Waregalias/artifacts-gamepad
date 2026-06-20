@@ -19,6 +19,9 @@
 
 .keyboard-key {
     appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 8px;
     color: #e6f8ff;
