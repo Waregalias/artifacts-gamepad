@@ -82,7 +82,8 @@
   "overrides": {
     "postcss": "^8.5.10",
     "tmp": "^0.2.6",
-    "dompurify": "^3.4.11"
+    "dompurify": "^3.4.12",
+    "axios": "^1.18.1"
   },
   "build": {
     "appId": "com.artifacts.gamepad",
