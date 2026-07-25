@@ -83,7 +83,8 @@
     "postcss": "^8.5.10",
     "tmp": "^0.2.6",
     "dompurify": "^3.4.12",
-    "axios": "^1.18.1"
+    "axios": "^1.18.1",
+    "sharp": "^0.35.3"
   },
   "build": {
     "appId": "com.artifacts.gamepad",
